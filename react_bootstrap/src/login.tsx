@@ -10,10 +10,20 @@ const Login = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5050/login", { email, password })
-      .then((result) => {
-        console.log(result);
-        // navigate("/home");
+      // user and token parameter = expecting values back
+      // email and password = sending variables to /login
+      .post<{ user: any; token: string }>("http://localhost:5050/login", {
+        email,
+        password,
+      })
+      .then((response) => {
+        const { user, token } = response.data;
+
+        // Save token on Browser
+        localStorage.setItem("token", token);
+
+        // Go to Home
+        navigate("/home");
       })
       .catch((err) => console.log(err));
   };

@@ -1,8 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const userModel = require('./models/user.model.js')
 
+const userModel = require('./models/user.model.js')
+const jwt = require('jsonwebtoken');
+const auth = require('./middleware/auth.js')
 
 
 const app = express();
@@ -27,9 +29,22 @@ app.post('/register', async (req, res) => {
         if (existingUser) {
             return res.status(409).json({ message: 'This email is already registered.' });
         }
+
         // validate input on user.models.js (such as no email, name or password)
-        const users = await userModel.create(req.body);
-        res.status(201).json(users); 
+        const user = await userModel.create(req.body);
+
+        // const tokenData = {
+        //     _id: user._id,
+        //     email: user.email,
+        //     name: user.name,
+        // };
+
+        // const token = jwt.sign(tokenData, process.env.TOKEN_KEY, { expiresIn: '1h' });
+        // console.log(token)
+
+        // above is the simple use of how to create a token but it the token doesn't have to be stored in database so this is pointless
+
+        res.status(201).json(user); 
     } catch (err) {
         res.status(400).json(err);
     }
@@ -46,11 +61,18 @@ app.post('/login', async (req, res) => {
         }
         
         if (user.password === password) {
-            res.json("Success");
-            console.log("Success");
-        } else {
-            res.json("Wrong password");
-            console.log("Wrong password");
+            const tokenData = {
+                _id: user._id,
+                email: user.email,
+                name: user.name,
+            };
+            const token = jwt.sign(tokenData, process.env.TOKEN_KEY, { expiresIn: '1h' });
+
+            console.log(token)
+            return res.status(201).json({user, token})
+        } 
+        else {
+            return res.status(401).json({ message: 'Authentication failed. Incorrect password.' });
         }
     } catch (err) {
         console.error('Error logging in:', err);
@@ -58,6 +80,11 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Verify the token
+app.get('/verify', auth.verifyToken, (req, res) => {
+    res.status(200).json({ success: true, message: 'Token is valid', user: req.user });
+  });
+  
 
 mongoose.connect(
     MONGO_URI
