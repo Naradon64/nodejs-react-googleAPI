@@ -16,6 +16,13 @@ const MONGO_URI = process.env.MONGO_URI; // Access MONGO_URI
 app.use(express.json());
 app.use(cors());
 
+// get all users
+app.get('/users', (req, res) => {
+    userModel.find()
+    .then(users => res.json(users))
+    .catch(err => res.json(err));
+});
+
 app.post('/register', async (req, res) => {
     try {
 

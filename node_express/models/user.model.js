@@ -13,6 +13,14 @@ const userSchema = mongoose.Schema(
         password: {
             type: String,
             required: [true, "Password is missing"],
+        },
+        age: {
+            type: Number,
+            required: [true, "Age is missing"],
+        },
+        address: {
+            type: String,
+            required: [true, "Adress is missing"],
         }
     },
     {

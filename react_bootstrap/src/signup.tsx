@@ -6,12 +6,14 @@ const Signup = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [age, setAge] = useState<number>();
+  const [address, setAddress] = useState<string>("");
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5050/register", { name, email, password })
+      .post("http://localhost:5050/register", { name, email, password, age, address })
       .then((result) => {
         console.log(result);
         navigate("/login");
@@ -68,6 +70,40 @@ const Signup = () => {
                     placeholder="Enter Password"
                     autoComplete="off"
                     onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="age" className="form-label">
+                    Age
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control rounded-0"
+                    id="age"
+                    name="age"
+                    placeholder="Enter Age"
+                    autoComplete="off"
+                    onChange={(e) => {
+                      // convert to int
+                      const value = e.target.value;
+                      setAge(value ? parseInt(value, 10) : undefined);
+                    }}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="address" className="form-label">
+                    Address
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control rounded-0"
+                    id="address"
+                    name="address"
+                    placeholder="Enter Address"
+                    autoComplete="off"
+                    onChange={(e) => setAddress(e.target.value)}
                     required
                   />
                 </div>
