@@ -16,6 +16,18 @@ app.use(cors());
 
 app.post('/register', async (req, res) => {
     try {
+
+        // Check if name or email or password is blank or null
+        if (req.body.name == null || req.body.email == null || req.body.password == null){
+           return res.status(400).json({message : 'Some values in req.body is blank (null)'});
+        }
+
+        // Check if the user already exists
+        const existingUser = await userModel.findOne({ email: req.body.email });
+        if (existingUser) {
+            return res.status(409).json({ message: 'This email is already registered.' });
+        }
+        // validate input on user.models.js (such as no email, name or password)
         const users = await userModel.create(req.body);
         res.status(201).json(users); 
     } catch (err) {
