@@ -14,6 +14,10 @@ const userSchema = mongoose.Schema(
             type: String,
             required: [true, "Password is missing"],
         },
+        token: {
+            type: String,
+            default: null
+        }
     },
     {
         timestamps: true, 

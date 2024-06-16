@@ -13,7 +13,7 @@ const Login = () => {
       .post("http://localhost:5050/login", { email, password })
       .then((result) => {
         console.log(result);
-        // navigate("/dashboard");
+        // navigate("/home");
       })
       .catch((err) => console.log(err));
   };

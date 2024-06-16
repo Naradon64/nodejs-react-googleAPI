@@ -4,8 +4,12 @@ const cors = require("cors");
 const userModel = require('./models/user.model.js')
 
 
+
 const app = express();
-const port = 5050;
+
+require('dotenv').config(); // load ENV
+const port = process.env.PORT; // Access PORT
+const MONGO_URI = process.env.MONGO_URI; // Access MONGO_URI
 
 app.use(express.json());
 app.use(cors());
@@ -43,15 +47,16 @@ app.post('/login', async (req, res) => {
 });
 
 
-mongoose.connect("mongodb+srv://naradon64:afSOC9Dt2c2YvRBA@userbase0.9zcwqya.mongodb.net/users")
-  .then(() => {
-    console.log("Connected to the database!");
-    app.listen(port, () => {
-      console.log(`Listening to port: ${port}`);
+mongoose.connect(
+    MONGO_URI
+  )
+    .then(() => {
+      console.log("Connected to the database!");
+      app.listen(port, () => {
+        console.log(`Listening to port: ${port}`);
+      });
+    })
+    .catch((err) => {
+      console.error("Connection failed:", err.message);
     });
-  })
-  .catch((err) => {
-    console.error("Connection failed:", err.message);
-  });
-
 
