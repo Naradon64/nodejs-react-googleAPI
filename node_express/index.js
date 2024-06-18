@@ -4,7 +4,8 @@ const cors = require("cors");
 
 const userModel = require('./models/user.model.js')
 const jwt = require('jsonwebtoken');
-const auth = require('./middleware/auth.js')
+const auth = require('./middleware/auth.js');
+const user = require("./models/user.model.js");
 
 
 const app = express();
@@ -23,6 +24,20 @@ app.get("/users", auth.verifyToken, (req, res) => {
       .then((users) => res.json(users))
       .catch((err) => res.status(500).json({ error: err.message }));
   });
+
+// get user by _id
+app.get("users/:_id", auth.verifyToken, (req, res) => {
+    const {id} = req.params;
+
+    if(!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
+
+    userModel
+    .findOne({id})
+    .then((user) => res.json(user))
+    .catch((err) => res.status(500).json({ error: err.message }));
+})
 
 app.post('/register', async (req, res) => {
     try {
@@ -85,6 +100,20 @@ app.post('/login', async (req, res) => {
     } catch (err) {
         console.error('Error logging in:', err);
         res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+app.put('/users/:_id', auth.verifyToken, async (req, res) => {
+    try {
+        const {id} = req.params;
+        const updateData = req.body;
+        const user = await User.findOneAndUpdate({id}, updateData, {new: true});
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({message: error.message});
     }
 });
 
