@@ -21,8 +21,8 @@ const Home: React.FC = () => {
     // Get token from localStorage
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      setToken(storedToken);
-      // Verify token and get user data
+      setToken(storedToken); // store storedToken value to token value on the top
+      // Get user data here
       axios
         .get("http://localhost:5050/verify", {
           headers: { Authorization: `Bearer ${storedToken}` },
@@ -38,6 +38,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     if (token) {
+      // the function will triggered when the depencency change but the purpose of "if (token)" is to check if Token actually exist
       axios
         .get("http://localhost:5050/users", {
           headers: { Authorization: `Bearer ${token}` },
@@ -45,7 +46,7 @@ const Home: React.FC = () => {
         .then((response) => setUsers(response.data))
         .catch((err) => console.log(err));
     }
-  }, [token]);
+  }, [token]); // [token] คือ dependency ของฟังก์ชั่นนี้ หาก token เปลี่ยน จะมีการรัน ฟังก์ชั่นนี้
 
   return (
     <div className={styles.container}>
