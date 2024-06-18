@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import styles from "./Home.module.css"; // Import the CSS module
 
 // Define the User type
 type User = {
@@ -47,57 +48,62 @@ const Home: React.FC = () => {
   }, [token]);
 
   return (
-    <div>
-      <h2>Homepage</h2>
-      {token ? (
-        <div>
-          <p>Token:</p>
-          <code>{token}</code>
-          <br />
-          {user ? (
-            <div>
-              <p>User:</p>
-              <code>{JSON.stringify(user)}</code>
-            </div>
-          ) : (
-            <p>No profile found.</p>
-          )}
-          <br />
-          <Link to="/logout">Logout</Link>
-        </div>
-      ) : (
-        <div>
-          <p>No token found. Please login.</p>
-          <Link to="/login">Login</Link>
-        </div>
-      )}
+    <div className={styles.container}>
+      <div className={styles.sidebar}>
+        <div className={styles.sidebarHeader}>Home Page</div>
+        <Link to="/logout" className={styles.sidebarLogout}>
+          Logout
+        </Link>
+      </div>
+      <div className={styles.mainContent}>
+        <h2>Homepage</h2>
+        {token ? (
+          <div className={styles.infoBox}>
+            <p>Token:</p>
+            <code>{token}</code>
+            <br />
+            {user ? (
+              <div>
+                <p>User:</p>
+                <code>{JSON.stringify(user)}</code>
+              </div>
+            ) : (
+              <p>No profile found.</p>
+            )}
+          </div>
+        ) : (
+          <div className={styles.infoBox}>
+            <p>No token found. Please login.</p>
+            <Link to="/login">Login</Link>
+          </div>
+        )}
 
-      {/* Show users information table */}
-      {token && users.length > 0 && (
-        <div className="w-100 vh-100 d-flex justify-content-center align-items-center">
-          <div className="justify-content-center"></div>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Age</th>
-                <th>Address</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.age}</td>
-                  <td>{user.address}</td>
+        {/* Show users information table */}
+        {token && users.length > 0 && (
+          <div className={`${styles.infoBox} ${styles.tableContainer}`}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Age</th>
+                  <th>Address</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user.id}>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.age}</td>
+                    <td>{user.address}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

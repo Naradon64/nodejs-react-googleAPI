@@ -1,0 +1,62 @@
+/* Home.module.css */
+.container {
+    display: flex;
+    height: 100vh;
+    background-color: #f0f0f0; 
+  }
+  
+  .sidebar {
+    width: 200px;
+    background-color: #ffffff; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebarHeader {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .sidebarLogout {
+    text-align: center;
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .mainContent {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .infoBox {
+    background-color: #e0e0e0;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .tableContainer {
+    margin-top: 20px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .table th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+  

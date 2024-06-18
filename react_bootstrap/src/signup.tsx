@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const Signup = () => {
   const [name, setName] = useState<string>("");
@@ -8,18 +10,26 @@ const Signup = () => {
   const [password, setPassword] = useState<string>("");
   const [age, setAge] = useState<number>();
   const [address, setAddress] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5050/register", { name, email, password, age, address })
+      .post("http://localhost:5050/register", {
+        name,
+        email,
+        password,
+        age,
+        address,
+      })
       .then((result) => {
         console.log(result);
         navigate("/login");
       })
       .catch((err) => console.log(err));
   };
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -58,20 +68,30 @@ const Signup = () => {
                     required
                   />
                 </div>
-                <div className="mb-3">
+                <div className="mb-3 position-relative">
                   <label htmlFor="password" className="form-label">
                     Password
                   </label>
-                  <input
-                    type="password"
-                    className="form-control rounded-0"
-                    id="password"
-                    name="password"
-                    placeholder="Enter Password"
-                    autoComplete="off"
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
+                  <div className="input-group">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className="form-control rounded-0"
+                      id="password"
+                      name="password"
+                      placeholder="Enter Password"
+                      autoComplete="off"
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <span
+                      className="input-group-text bg-white border-0 cursor-pointer"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      <FontAwesomeIcon
+                        icon={showPassword ? faEyeSlash : faEye}
+                      />
+                    </span>
+                  </div>
                 </div>
                 <div className="mb-3">
                   <label htmlFor="age" className="form-label">
@@ -85,7 +105,6 @@ const Signup = () => {
                     placeholder="Enter Age"
                     autoComplete="off"
                     onChange={(e) => {
-                      // convert to int
                       const value = e.target.value;
                       setAge(value ? parseInt(value, 10) : undefined);
                     }}
