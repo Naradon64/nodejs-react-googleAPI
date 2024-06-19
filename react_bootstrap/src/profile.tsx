@@ -5,7 +5,7 @@ import styles from "./Profile.module.css"; // Import the CSS module
 
 // Define the User type
 type User = {
-    id: number;
+    _id: string;
     name: string;
     email: string;
     age: number;
@@ -17,7 +17,7 @@ const Profile: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [editedUser, setEditedUser] = useState<User | null>(null);
-
+    
     useEffect(() => {
         // Get token from localStorage
         const storedToken = localStorage.getItem("token");
@@ -36,20 +36,6 @@ const Profile: React.FC = () => {
             });
         }
       }, []);
-
-    useEffect(() => {
-    if (token) {
-        axios
-        .get("http://localhost:5050/users/:_id", {
-            headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-            setUser(response.data); // Set user data when fetched
-            setEditedUser(response.data); // Initialize editedUser with user data
-        })
-        .catch((err) => console.log(err));
-    }
-    }, [token]);
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -71,16 +57,18 @@ const Profile: React.FC = () => {
         if (token && editedUser) {
             axios
               .put(
-                `http://localhost:5050/users/${editedUser.id}`,
+                `http://localhost:5050/users/${editedUser._id}`,
                 { ...editedUser },
                 { headers: { Authorization: `Bearer ${token}` } }
               )
-              .then((response) => {
+              .then ((response) => {
                 setUser(response.data);
                 setIsEditing(false);
               })
-              .catch((err) => console.log(err));
-          }
+              .catch ((err) => {
+                console.log(err);
+            });
+        }
     };
 
     return (

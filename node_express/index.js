@@ -88,6 +88,8 @@ app.post('/login', async (req, res) => {
                 _id: user._id,
                 email: user.email,
                 name: user.name,
+                age: user.age,
+                address: user.address
             };
             const token = jwt.sign(tokenData, process.env.TOKEN_KEY, { expiresIn: '1h' });
 
@@ -103,11 +105,11 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.put('/users/:_id', auth.verifyToken, async (req, res) => {
+app.put('/users/:id', auth.verifyToken, async (req, res) => {
     try {
         const {id} = req.params;
         const updateData = req.body;
-        const user = await User.findOneAndUpdate({id}, updateData, {new: true});
+        const user = await userModel.findByIdAndUpdate(id, updateData, {new: true});
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
