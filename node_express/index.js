@@ -122,6 +122,11 @@ app.get('/verify', auth.verifyToken, (req, res) => {
     res.status(200).json({ success: true, message: 'Token is valid', user: req.user });
   });
   
+// Get Google API key for FrontEnd
+app.get('/api/get-google-maps-api-key', (req, res) => {
+    const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
+    res.json({ apiKey: googleMapsApiKey });
+});
 
 mongoose.connect(
     MONGO_URI

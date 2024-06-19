@@ -5,7 +5,8 @@ import Signup from "./signup.tsx";
 import Login from "./login.tsx";
 import Home from "./home.tsx";
 import Logout from "./logout.tsx";
-import Profile from "./profile.tsx"
+import Profile from "./profile.tsx";
+import Intro from "./mapPage.tsx";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/home" element={<Home />}></Route>
         <Route path="/logout" element={<Logout />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
+        <Route path="/map" element={<Intro />}></Route>
       </Routes>
     </BrowserRouter>
   );
