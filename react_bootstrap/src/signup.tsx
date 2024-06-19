@@ -3,15 +3,30 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import PlacesAutocomplete from 'react-places-autocomplete';
+import {
+  geocodeByAddress,
+  geocodeByPlaceId,
+  getLatLng,
+} from 'react-places-autocomplete';
 
 const Signup = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [age, setAge] = useState<number>();
-  const [address, setAddress] = useState<string>("");
+  const [address, setAddress] = useState<nu>();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [coordinates, setCoordinates] = useState({lat: null, lng: null});
+
+  const handleSelect = async (value: string) => {
+    const results = await geocodeByAddress(value);
+    const latLng = await getLatLng(results[0]);
+    setAddress(value);
+    setCoordinates(latLng);
+
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -115,16 +130,31 @@ const Signup = () => {
                   <label htmlFor="address" className="form-label">
                     Address
                   </label>
-                  <input
-                    type="text"
-                    className="form-control rounded-0"
-                    id="address"
-                    name="address"
-                    placeholder="Enter Address"
-                    autoComplete="off"
-                    onChange={(e) => setAddress(e.target.value)}
-                    required
-                  />
+                  <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect}>
+                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                      <div>
+                          <p>Latitude: {coordinates.lat}</p>
+                          <p>Longitude: {coordinates.lng}</p>
+                          <input {...getInputProps({placeholder: "Enter address"})} />
+                        <div>
+                          {loading ? <div>...loading</div> : null}
+                          {suggestions.map(suggestions => {
+                            const className = suggestions.active
+                            ? 'suggestion-item--active'
+                            : 'suggestion-item';
+                            // inline style for demonstration purpose
+                            const style = suggestions.active
+                            ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                            : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                            return <div {...getSuggestionItemProps(suggestions, {
+                              className,
+                              style,
+                            })}>{suggestions.description}</div>
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </PlacesAutocomplete>
                 </div>
                 <button
                   type="submit"
