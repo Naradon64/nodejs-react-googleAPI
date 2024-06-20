@@ -4,6 +4,7 @@ import axios from "axios";
 import styles from "./Profile.module.css"; // Import the CSS module
 import PlacesAutocomplete from "react-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import { GoogleMap, MarkerF } from '@react-google-maps/api';
 
 // Define the User type
 type User = {
@@ -12,6 +13,8 @@ type User = {
   email: string;
   age: number;
   address: string;
+  latitude: number;
+  longitude: number;
 };
 
 const Profile: React.FC = () => {
@@ -40,6 +43,7 @@ const Profile: React.FC = () => {
               headers: { Authorization: `Bearer ${storedToken}` },
             })
             .then((userData) => {
+                console.log(userData);
               setUser(userData.data);
             })
             .catch((err) => {
@@ -79,11 +83,13 @@ const Profile: React.FC = () => {
     setAddress(value);
     setCoordinates(latLng);
 
-    // Update the address in the editedUser state
+    // Update the address and coordinates in the editedUser state
     if (editedUser) {
         setEditedUser({
           ...editedUser,
           address: value,
+          latitude: latLng.lat,
+          longitude: latLng.lng,
         });
     }
   };
@@ -212,7 +218,18 @@ const Profile: React.FC = () => {
                 <div className="mt-2">
                     <p className="mb-1">Latitude: {coordinates.lat}</p>
                     <p>Longitude: {coordinates.lng}</p>
-                  </div>
+                </div>
+                <GoogleMap
+                    mapContainerStyle={{
+                        width: '1000px',
+                        height: '700px'
+                      }}
+                    center={{ lat: coordinates.lat || 0, lng: coordinates.lng || 0 }}
+                    zoom={15}
+                    >
+                    { /* Child components, such as markers, info windows, etc. */ }
+                    <MarkerF position={{ lat: coordinates.lat || 0, lng: coordinates.lng || 0 }} />
+                </GoogleMap>
                 <button onClick={handleSaveClick}>Save</button>
               </>
             ) : (
@@ -229,6 +246,23 @@ const Profile: React.FC = () => {
                 <p>
                   <strong>Address:</strong> {user.address}
                 </p>
+                <p>
+                  <strong>Latitude:</strong> {user.latitude}
+                </p>
+                <p>
+                  <strong>Longtitude:</strong> {user.longitude}
+                </p>
+                <GoogleMap
+                    mapContainerStyle={{
+                        width: '1000px',
+                        height: '700px'
+                      }}
+                    center={{ lat: user.latitude || 0, lng: user.longitude || 0 }}
+                    zoom={15}
+                    >
+                    { /* Child components, such as markers, info windows, etc. */ }
+                    <MarkerF position={{ lat: user.latitude || 0, lng: user.longitude || 0 }} />
+                </GoogleMap>
                 <button onClick={handleEditClick}> Edit </button>
               </>
             )}
