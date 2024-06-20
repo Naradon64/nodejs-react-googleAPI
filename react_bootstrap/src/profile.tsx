@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import styles from "./Profile.module.css"; // Import the CSS module
+import PlacesAutocomplete from "react-places-autocomplete";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
 // Define the User type
 type User = {
@@ -17,6 +19,11 @@ const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedUser, setEditedUser] = useState<User | null>(null);
+  const [address, setAddress] = useState<string>("");
+  const [coordinates, setCoordinates] = useState<{
+    lat: number | null;
+    lng: number | null;
+  }>({ lat: null, lng: null });
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -45,10 +52,15 @@ const Profile: React.FC = () => {
     }
   }, []);
 
-  const handleEditClick = () => {
+  const handleEditClick = async () => {
     setIsEditing(true);
     if (user) {
       setEditedUser(user);
+      setAddress(user.address);
+      // Geocode the current address to get the coordinates
+      const results = await geocodeByAddress(user.address);
+      const latLng = await getLatLng(results[0]);
+      setCoordinates(latLng); // Set the coordinates state to the current user's coordinates
     }
   };
 
@@ -58,6 +70,21 @@ const Profile: React.FC = () => {
         ...editedUser,
         [e.target.name]: e.target.value,
       });
+    }
+  };
+
+  const handleSelect = async (value: string) => {
+    const results = await geocodeByAddress(value);
+    const latLng = await getLatLng(results[0]);
+    setAddress(value);
+    setCoordinates(latLng);
+
+    // Update the address in the editedUser state
+    if (editedUser) {
+        setEditedUser({
+          ...editedUser,
+          address: value,
+        });
     }
   };
 
@@ -135,14 +162,57 @@ const Profile: React.FC = () => {
                 </div>
                 <div className={styles.itemStyle}>
                   <strong>Address</strong>
-                  <input
+                  {/* <input
                     type="text"
                     name="address"
                     value={editedUser?.address || ""}
                     onChange={handleInputChange}
                     className={styles.inputStyle}
-                  />
+                  /> */}
+                  <PlacesAutocomplete
+                    value={address}
+                    onChange={setAddress}
+                    onSelect={handleSelect}
+                  >
+                    {({
+                      getInputProps,
+                      suggestions,
+                      getSuggestionItemProps,
+                      loading,
+                    }) => (
+                      <div>
+                        <input
+                            {...getInputProps({ placeholder: "Enter address" })}
+                            type="text"
+                            name="address"
+                            value={address}
+                            className={styles.inputStyle}
+                        />
+                        <div className="autocomplete-dropdown">
+                          {loading && <div>...loading</div>}
+                          {suggestions.map((suggestion) => {
+                            const className = suggestion.active
+                              ? "suggestion-item suggestion-item--active"
+                              : "suggestion-item";
+                            return (
+                              <div
+                                {...getSuggestionItemProps(suggestion, {
+                                  className,
+                                })}
+                              >
+                                {suggestion.description}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </PlacesAutocomplete>
                 </div>
+                <div className="mt-2">
+                    <p className="mb-1">Latitude: {coordinates.lat}</p>
+                    <p>Longitude: {coordinates.lng}</p>
+                  </div>
                 <button onClick={handleSaveClick}>Save</button>
               </>
             ) : (

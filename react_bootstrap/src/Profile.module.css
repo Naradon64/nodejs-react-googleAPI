@@ -60,4 +60,27 @@
     margin-left: 10px;
     flex: 1;
     padding: 5px;
+    min-width: 1080px;
 }
+
+  .autocomplete-dropdown {
+    border: 1px solid #ced4da;
+    border-radius: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #fff;
+  }
+  
+  .suggestion-item {
+    padding: 10px;
+    background-color: #fff;
+    transition: background-color 0.2s ease;
+  }
+  
+  .suggestion-item--active,
+  .suggestion-item:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+  }
+  
