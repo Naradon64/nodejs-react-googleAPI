@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const userModel = require('./models/user.model.js')
-const jwt = require('jsonwebtoken');
 const auth = require('./middleware/auth.js');
 const user = require("./models/user.model.js");
 
@@ -26,18 +25,21 @@ app.get("/users", auth.verifyToken, (req, res) => {
   });
 
 // get user by _id
-app.get("users/:_id", auth.verifyToken, (req, res) => {
-    const {id} = req.params;
-
-    if(!user) {
-        return res.status(404).json({ message: "User not found" });
-    }
-
-    userModel
-    .findOne({id})
-    .then((user) => res.json(user))
-    .catch((err) => res.status(500).json({ error: err.message }));
-})
+app.get('/users/:_id', auth.verifyToken, (req, res) => {
+    const { _id } = req.params;
+    userModel.findById(_id)
+      .then(user => {
+        if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+        
+        res.status(201).json(user);
+      })
+      .catch(err => {
+        console.error('Error fetching user:', err);
+        res.status(500).json({ message: 'Internal Server Error' });
+      });
+  });
 
 app.post('/register', async (req, res) => {
     try {
@@ -55,18 +57,6 @@ app.post('/register', async (req, res) => {
 
         // validate input on user.models.js (such as no email, name or password)
         const user = await userModel.create(req.body);
-
-        // const tokenData = {
-        //     _id: user._id,
-        //     email: user.email,
-        //     name: user.name,
-        // };
-
-        // const token = jwt.sign(tokenData, process.env.TOKEN_KEY, { expiresIn: '1h' });
-        // console.log(token)
-
-        // above is the simple use of how to create a token but it the token doesn't have to be stored in database so this is pointless
-
         res.status(201).json(user); 
     } catch (err) {
         res.status(400).json(err);
@@ -84,21 +74,13 @@ app.post('/login', async (req, res) => {
         }
         
         if (user.password === password) {
-            const tokenData = {
-                _id: user._id,
-                email: user.email,
-                name: user.name,
-                age: user.age,
-                address: user.address
-            };
-            const token = jwt.sign(tokenData, process.env.TOKEN_KEY, { expiresIn: '1h' });
-
+            console.log(user)
+            const token = auth.generateToken(user);
             console.log(token)
-            return res.status(201).json({user, token})
-        } 
-        else {
+            return res.status(201).json({ user, token });
+          } else {
             return res.status(401).json({ message: 'Authentication failed. Incorrect password.' });
-        }
+          }
     } catch (err) {
         console.error('Error logging in:', err);
         res.status(500).json({ message: "Internal Server Error" });
