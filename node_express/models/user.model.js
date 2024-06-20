@@ -20,7 +20,15 @@ const userSchema = mongoose.Schema(
         },
         address: {
             type: String,
-            required: [true, "Adress is missing"],
+            required: [true, "Address is missing"],
+        },
+        latitude: {
+            type: Number,
+            required: [true, "latitude is missing"],
+        },
+        longitude: {
+            type: Number,
+            required: [true, "longitude is missing"],
         }
     },
     {
