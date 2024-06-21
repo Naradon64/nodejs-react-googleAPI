@@ -45,7 +45,7 @@ app.post('/register', async (req, res) => {
     try {
 
         // Check if name or email or password is blank or null
-        if (req.body.name == null || req.body.email == null || req.body.password == null){
+        if (req.body.name == null || req.body.email == null || req.body.password == null || req.body.age == null || req.body.address == null || req.body.latitude == null || req.body.longitude == null){
            return res.status(400).json({message : 'Some values in req.body is blank (null)'});
         }
 
@@ -70,16 +70,16 @@ app.post('/login', async (req, res) => {
         const user = await userModel.findOne({ email: email });
 
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ message: "User not found" }); // Not Found Status
         }
         
         if (user.password === password) {
             console.log(user)
             const token = auth.generateToken(user);
             console.log(token)
-            return res.status(201).json({ user, token });
+            return res.status(201).json({ user, token }); // Created Status
           } else {
-            return res.status(401).json({ message: 'Authentication failed. Incorrect password.' });
+            return res.status(401).json({ message: 'Authentication failed. Incorrect password.' }); // Not Authorized Status
           }
     } catch (err) {
         console.error('Error logging in:', err);
