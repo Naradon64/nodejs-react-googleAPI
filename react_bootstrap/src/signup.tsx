@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
-import { GoogleMap, MarkerF } from '@react-google-maps/api';
+import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import "./signup.css";
 
 const Signup = () => {
@@ -31,7 +31,7 @@ const Signup = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5050/register", {
+      .post("http://0.0.0.0:5050/register", {
         name,
         email,
         password,
@@ -180,15 +180,23 @@ const Signup = () => {
                   </div>
                   <GoogleMap
                     mapContainerStyle={{
-                        width: '540px',
-                        height: '300px'
-                      }}
-                    center={{ lat: coordinates.lat || 0, lng: coordinates.lng || 0 }}
+                      width: "540px",
+                      height: "300px",
+                    }}
+                    center={{
+                      lat: coordinates.lat || 0,
+                      lng: coordinates.lng || 0,
+                    }}
                     zoom={15}
-                    >
-                    { /* Child components, such as markers, info windows, etc. */ }
-                    <MarkerF position={{ lat: coordinates.lat || 0, lng: coordinates.lng || 0 }} />
-                </GoogleMap>
+                  >
+                    {/* Child components, such as markers, info windows, etc. */}
+                    <MarkerF
+                      position={{
+                        lat: coordinates.lat || 0,
+                        lng: coordinates.lng || 0,
+                      }}
+                    />
+                  </GoogleMap>
                 </div>
                 <button
                   type="submit"
