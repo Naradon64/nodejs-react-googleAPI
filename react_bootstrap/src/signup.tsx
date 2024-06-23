@@ -31,7 +31,7 @@ const Signup = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .post("http://0.0.0.0:5050/register", {
+      .post("http://localhost:5050/register", {
         name,
         email,
         password,

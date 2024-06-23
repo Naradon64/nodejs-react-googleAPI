@@ -18,7 +18,7 @@ function App() {
         <Route path="/home" element={<Home />}></Route>
         <Route path="/logout" element={<Logout />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
-        <Route path="/map" element={<Intro />}></Route>
+        <Route path="/map/:id" element={<Intro />}></Route>
       </Routes>
     </BrowserRouter>
   );

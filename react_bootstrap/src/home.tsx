@@ -5,7 +5,7 @@ import styles from "./Home.module.css"; // Import the CSS module
 
 // Define the User type
 type User = {
-  id: number;
+  _id: string;
   name: string;
   email: string;
   age: number;
@@ -55,11 +55,11 @@ const Home: React.FC = () => {
           <Link to="/home" className={styles.sidebarHeader}>
             Home Page
           </Link>
-        <div>
-          <Link to="/profile" className={styles.sidebarProfile}>
-            My Profile
-          </Link>
-        </div>
+          <div>
+            <Link to="/profile" className={styles.sidebarProfile}>
+              My Profile
+            </Link>
+          </div>
         </div>
         <Link to="/logout" className={styles.sidebarLogout}>
           Logout
@@ -102,11 +102,16 @@ const Home: React.FC = () => {
               </thead>
               <tbody>
                 {users.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.name}</td>
+                  <tr key={user._id}>
+                    <td>{user._id}</td>
                     <td>{user.email}</td>
                     <td>{user.age}</td>
                     <td>{user.address}</td>
+                    <td>
+                      <Link to={`/map/${user._id}`} className={styles.mapLink}>
+                        View on Map
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>

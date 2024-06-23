@@ -7,9 +7,11 @@ import {
   InfoWindow,
 } from "@vis.gl/react-google-maps";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const Intro: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>("");
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     const fetchApiKey = async () => {
@@ -25,6 +27,8 @@ const Intro: React.FC = () => {
 
     fetchApiKey();
   }, []);
+
+  console.log(id);
 
   // Modify container of Map here
   //   const containerStyle = {
@@ -56,6 +60,7 @@ const Intro: React.FC = () => {
         </APIProvider>
       )}
     </div>
+    // console.log(id)
   );
 };
 
