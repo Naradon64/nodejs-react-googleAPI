@@ -1,39 +1,39 @@
 {
-    "type": "object",
-    "properties": {
-      "name": {
-        "type": "string",
-        "minLength": 1,
-        "description": "Full Name"
-      },
-      "email": {
-        "type": "string",
-        "format": "email",
-        "description": "Email Address"
-      },
-      "password": {
-        "type": "string",
-        "minLength": 6,
-        "description": "Password"
-      },
-      "age": {
-        "type": "integer",
-        "minimum": 0,
-        "description": "Age"
-      },
-      "address": {
-        "type": "string",
-        "description": "Address"
-      },
-      "latitude": {
-        "type": "number",
-        "description": "Latitude"
-      },
-      "longitude": {
-        "type": "number",
-        "description": "Longitude"
-      }
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Full Name"
     },
-    "required": ["name", "email", "password", "age", "address", "latitude", "longitude"]
-  }
-  
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email Address"
+    },
+    "password": {
+      "type": "string",
+      "minLength": 6,
+      "description": "Password"
+    },
+    "age": {
+      "type": "integer",
+      "description": "Age",
+      "minimum": 1,
+      "error": "Age must be greater than 0"
+    },
+    "address": {
+      "type": "string",
+      "description": "Address"
+    },
+    "latitude": {
+      "type": "number",
+      "description": "Latitude"
+    },
+    "longitude": {
+      "type": "number",
+      "description": "Longitude"
+    }
+  },
+  "required": ["name", "email", "password", "age", "address", "latitude", "longitude"]
+}

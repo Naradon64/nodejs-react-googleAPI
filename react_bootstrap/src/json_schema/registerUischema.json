@@ -14,12 +14,20 @@
     {
       "type": "Control",
       "scope": "#/properties/password",
-      "label": "Password"
+      "label": "Password",
+      "options": {
+        "format": "password"
+      }
     },
     {
       "type": "Control",
       "scope": "#/properties/age",
-      "label": "Age"
+      "label": "Age",
+      "options": {
+        "format": "number",
+        "range": false,
+        "showSlider": false
+      }
     },
     {
       "type": "Control",

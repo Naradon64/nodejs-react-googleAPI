@@ -1,28 +1,34 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { JsonForms } from "@jsonforms/react";
+import loginSchema from "./json_schema/loginSchema.json";
+import loginUiSchema from "./json_schema/loginUischema.json";
+import {
+  materialRenderers,
+  materialCells,
+} from "@jsonforms/material-renderers";
 
 const Login = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [formData, setFormData] = useState<{ email: string; password: string }>(
+    { email: "", password: "" }
+  );
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      // user and token parameter = expecting values back
-      // email and password = sending variables to /login
-      .post<{ user: any; token: string }>("http://localhost:5050/login", {
-        email,
-        password,
-      })
+      .post<{ user: any; token: string }>(
+        "http://localhost:5050/login",
+        formData
+      )
       .then((response) => {
-        const { user, token } = response.data;
+        const { token } = response.data;
 
-        // Save token on Browser
+        // Save token in localStorage
         localStorage.setItem("token", token);
 
-        // Go to Home
+        // Navigate to home page
         navigate("/home");
       })
       .catch((err) => console.log(err));
@@ -36,36 +42,14 @@ const Login = () => {
             <div className="card-body p-5">
               <h2 className="card-title text-center mb-4">Login</h2>
               <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control rounded-0"
-                    id="email"
-                    name="email"
-                    placeholder="Enter Email"
-                    autoComplete="off"
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control rounded-0"
-                    id="password"
-                    name="password"
-                    placeholder="Enter Password"
-                    autoComplete="off"
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
+                <JsonForms
+                  schema={loginSchema}
+                  uischema={loginUiSchema}
+                  data={formData}
+                  renderers={materialRenderers}
+                  cells={materialCells}
+                  onChange={({ data }) => setFormData(data)}
+                />
                 <button
                   type="submit"
                   className="btn btn-primary w-100 rounded-0"
