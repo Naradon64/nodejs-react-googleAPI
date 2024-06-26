@@ -10,9 +10,7 @@ import {
 } from "@jsonforms/material-renderers";
 
 const Login = () => {
-  const [formData, setFormData] = useState<{ email: string; password: string }>(
-    { email: "", password: "" }
-  );
+  const [formData, setFormData] = useState<{ email: string; password: string } | null>(null);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

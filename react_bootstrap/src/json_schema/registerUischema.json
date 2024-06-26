@@ -28,11 +28,7 @@
         "range": false,
         "showSlider": false
       }
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/address",
-      "label": "Address"
     }
+    
   ]
 }

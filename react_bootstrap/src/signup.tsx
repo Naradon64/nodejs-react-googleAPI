@@ -13,21 +13,22 @@ import registerSchema from "./json_schema/registerSchema.json";
 import registerUischema from "./json_schema/registerUischema.json";
 import "./signup.css";
 
+type Data = {
+  name?: string;
+  email?: string;
+  age?: number;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
+};
+
 const Register = () => {
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    age: 0,
-    address: "",
-    latitude: null,
-    longitude: null,
-  });
+  const [data, setData] = useState<Data>();
   const [showPassword, setShowPassword] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const navigate = useNavigate();
 
-  const handleSelect = async (value) => {
+  const handleSelect = async (value: string) => {
     const results = await geocodeByAddress(value);
     const latLng = await getLatLng(results[0]);
     setData((prevData) => ({
@@ -38,7 +39,7 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
       .post("http://localhost:5050/register", data)
@@ -50,9 +51,9 @@ const Register = () => {
   };
 
   const handleDebug = () => {
-    console.log("Age:", data.age);
-    console.log("Address:", data.address);
-    console.log("Coordinates:", { lat: data.latitude, lng: data.longitude });
+    console.log("Age:", data?.age);
+    console.log("Address:", data?.address);
+    console.log("Coordinates:", { lat: data?.latitude, lng: data?.longitude });
   };
 
   return (
@@ -73,14 +74,11 @@ const Register = () => {
                   data={data}
                   renderers={materialRenderers}
                   cells={materialCells}
-                  onChange={({ data, errors }) => setData(data)}
+                  onChange={({ data }) => setData(data)}
                 />
                 <div className="mb-3 position-relative">
-                  <label htmlFor="address" className="form-label">
-                    Address
-                  </label>
                   <PlacesAutocomplete
-                    value={data.address}
+                    value={data?.address}
                     onChange={(value) =>
                       setData((prevData) => ({
                         ...prevData,
@@ -122,8 +120,8 @@ const Register = () => {
                     )}
                   </PlacesAutocomplete>
                   <div className="mt-2">
-                    <p className="mb-1">Latitude: {data.latitude}</p>
-                    <p>Longitude: {data.longitude}</p>
+                    <p className="mb-1">Latitude: {data?.latitude}</p>
+                    <p>Longitude: {data?.longitude}</p>
                   </div>
                   <GoogleMap
                     mapContainerStyle={{
@@ -131,15 +129,15 @@ const Register = () => {
                       height: "300px",
                     }}
                     center={{
-                      lat: data.latitude || 0,
-                      lng: data.longitude || 0,
+                      lat: data?.latitude || 0,
+                      lng: data?.longitude || 0,
                     }}
                     zoom={15}
                   >
                     <MarkerF
                       position={{
-                        lat: data.latitude || 0,
-                        lng: data.longitude || 0,
+                        lat: data?.latitude || 0,
+                        lng: data?.longitude || 0,
                       }}
                     />
                   </GoogleMap>
