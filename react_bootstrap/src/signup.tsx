@@ -1,45 +1,47 @@
 import React, { useState } from "react";
+import { JsonForms } from "@jsonforms/react";
+import {
+  materialRenderers,
+  materialCells,
+} from "@jsonforms/material-renderers";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import registerSchema from "./json_schema/registerSchema.json";
+import registerUischema from "./json_schema/registerUischema.json";
 import "./signup.css";
 
-const Signup = () => {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [age, setAge] = useState<number>();
-  const [address, setAddress] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+const Register = () => {
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    age: 0,
+    address: "",
+    latitude: null,
+    longitude: null,
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const navigate = useNavigate();
-  const [coordinates, setCoordinates] = useState<{
-    lat: number | null;
-    lng: number | null;
-  }>({ lat: null, lng: null });
 
-  const handleSelect = async (value: string) => {
+  const handleSelect = async (value) => {
     const results = await geocodeByAddress(value);
     const latLng = await getLatLng(results[0]);
-    setAddress(value);
-    setCoordinates(latLng);
+    setData((prevData) => ({
+      ...prevData,
+      address: value,
+      latitude: latLng.lat,
+      longitude: latLng.lng,
+    }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5050/register", {
-        name,
-        email,
-        password,
-        age,
-        address,
-        latitude: coordinates.lat,
-        longitude: coordinates.lng,
-      })
+      .post("http://localhost:5050/register", data)
       .then((result) => {
         console.log(result);
         navigate("/login");
@@ -48,8 +50,9 @@ const Signup = () => {
   };
 
   const handleDebug = () => {
-    console.log("Address:", address);
-    console.log("Coordinates:", coordinates);
+    console.log("Age:", data.age);
+    console.log("Address:", data.address);
+    console.log("Coordinates:", { lat: data.latitude, lng: data.longitude });
   };
 
   return (
@@ -59,87 +62,31 @@ const Signup = () => {
           <div className="card shadow-sm">
             <div className="card-body p-5">
               <h2 className="card-title text-center mb-4">Register</h2>
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="name" className="form-label">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control rounded-0"
-                    id="name"
-                    name="name"
-                    placeholder="Enter Name"
-                    autoComplete="off"
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control rounded-0"
-                    id="email"
-                    name="email"
-                    placeholder="Enter Email"
-                    autoComplete="off"
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
+              <form
+                onSubmit={handleSubmit}
+                onFocus={() => setHasInteracted(true)}
+                onChange={() => setHasInteracted(true)}
+              >
+                <JsonForms
+                  schema={registerSchema}
+                  uischema={registerUischema}
+                  data={data}
+                  renderers={materialRenderers}
+                  cells={materialCells}
+                  onChange={({ data, errors }) => setData(data)}
+                />
                 <div className="mb-3 position-relative">
-                  <label htmlFor="password" className="form-label">
-                    Password
-                  </label>
-                  <div className="input-group">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      className="form-control rounded-0"
-                      id="password"
-                      name="password"
-                      placeholder="Enter Password"
-                      autoComplete="off"
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                    <span
-                      className="input-group-text bg-white border-0 cursor-pointer"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      <FontAwesomeIcon
-                        icon={showPassword ? faEyeSlash : faEye}
-                      />
-                    </span>
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="age" className="form-label">
-                    Age
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control rounded-0"
-                    id="age"
-                    name="age"
-                    placeholder="Enter Age"
-                    autoComplete="off"
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setAge(value ? parseInt(value, 10) : undefined);
-                    }}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
                   <label htmlFor="address" className="form-label">
                     Address
                   </label>
                   <PlacesAutocomplete
-                    value={address}
-                    onChange={setAddress}
+                    value={data.address}
+                    onChange={(value) =>
+                      setData((prevData) => ({
+                        ...prevData,
+                        address: value,
+                      }))
+                    }
                     onSelect={handleSelect}
                   >
                     {({
@@ -175,8 +122,8 @@ const Signup = () => {
                     )}
                   </PlacesAutocomplete>
                   <div className="mt-2">
-                    <p className="mb-1">Latitude: {coordinates.lat}</p>
-                    <p>Longitude: {coordinates.lng}</p>
+                    <p className="mb-1">Latitude: {data.latitude}</p>
+                    <p>Longitude: {data.longitude}</p>
                   </div>
                   <GoogleMap
                     mapContainerStyle={{
@@ -184,16 +131,15 @@ const Signup = () => {
                       height: "300px",
                     }}
                     center={{
-                      lat: coordinates.lat || 0,
-                      lng: coordinates.lng || 0,
+                      lat: data.latitude || 0,
+                      lng: data.longitude || 0,
                     }}
                     zoom={15}
                   >
-                    {/* Child components, such as markers, info windows, etc. */}
                     <MarkerF
                       position={{
-                        lat: coordinates.lat || 0,
-                        lng: coordinates.lng || 0,
+                        lat: data.latitude || 0,
+                        lng: data.longitude || 0,
                       }}
                     />
                   </GoogleMap>
@@ -226,4 +172,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Register;
