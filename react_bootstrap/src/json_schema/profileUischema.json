@@ -1,0 +1,29 @@
+{
+    "type": "VerticalLayout",
+    "elements": [
+      {
+        "type": "Control",
+        "scope": "#/properties/name",
+        "label": "Full Name"
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/email",
+        "label": "Email Address"
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/password",
+        "label": "Password",
+        "options": {
+          "inputType": "password"
+        }
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/age",
+        "label": "Age"
+      }
+    ]
+  }
+  

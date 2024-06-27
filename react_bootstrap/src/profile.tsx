@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { JsonForms } from "@jsonforms/react";
+import {
+  materialRenderers,
+  materialCells,
+} from "@jsonforms/material-renderers";
+import profileSchema from "./json_schema/profileSchema.json";
+import profileUiSchema from "./json_schema/profileUischema.json";
 import styles from "./Profile.module.css"; // Import the CSS module
 import PlacesAutocomplete from "react-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
-import { GoogleMap, MarkerF } from '@react-google-maps/api';
+import { GoogleMap, MarkerF } from "@react-google-maps/api";
 
 // Define the User type
 type User = {
   _id: string;
   name: string;
   email: string;
+  password: string;
   age: number;
   address: string;
   latitude: number;
@@ -43,7 +51,7 @@ const Profile: React.FC = () => {
               headers: { Authorization: `Bearer ${storedToken}` },
             })
             .then((userData) => {
-                console.log(userData);
+              console.log(userData);
               setUser(userData.data);
             })
             .catch((err) => {
@@ -85,12 +93,12 @@ const Profile: React.FC = () => {
 
     // Update the address and coordinates in the editedUser state
     if (editedUser) {
-        setEditedUser({
-          ...editedUser,
-          address: value,
-          latitude: latLng.lat,
-          longitude: latLng.lng,
-        });
+      setEditedUser({
+        ...editedUser,
+        address: value,
+        latitude: latLng.lat,
+        longitude: latLng.lng,
+      });
     }
   };
 
@@ -133,48 +141,18 @@ const Profile: React.FC = () => {
         <h1>My profile</h1>
         {user ? (
           <div className={styles.infoBox}>
-            {/* ถ้ากดปุ่ม edit isEditing จะ true ทำให้เข้าอันนี้ */}
             {isEditing ? (
               <>
-                <div className={styles.itemStyle}>
-                  <strong>Name</strong>
-                  <input
-                    type="text"
-                    name="name"
-                    value={editedUser?.name || ""}
-                    onChange={handleInputChange}
-                    className={styles.inputStyle}
-                  />
-                </div>
-                <div className={styles.itemStyle}>
-                  <strong>Email</strong>
-                  <input
-                    type="email"
-                    name="email"
-                    value={editedUser?.email || ""}
-                    onChange={handleInputChange}
-                    className={styles.inputStyle}
-                  />
-                </div>
-                <div className={styles.itemStyle}>
-                  <strong>Age</strong>
-                  <input
-                    type="number"
-                    name="age"
-                    value={editedUser?.age || ""}
-                    onChange={handleInputChange}
-                    className={styles.inputStyle}
-                  />
-                </div>
+                <JsonForms
+                  schema={profileSchema}
+                  uischema={profileUiSchema}
+                  data={editedUser}
+                  renderers={materialRenderers}
+                  cells={materialCells}
+                  onChange={({ data }) => setEditedUser(data)}
+                />
                 <div className={styles.itemStyle}>
                   <strong>Address</strong>
-                  {/* <input
-                    type="text"
-                    name="address"
-                    value={editedUser?.address || ""}
-                    onChange={handleInputChange}
-                    className={styles.inputStyle}
-                  /> */}
                   <PlacesAutocomplete
                     value={address}
                     onChange={setAddress}
@@ -188,11 +166,11 @@ const Profile: React.FC = () => {
                     }) => (
                       <div>
                         <input
-                            {...getInputProps({ placeholder: "Enter address" })}
-                            type="text"
-                            name="address"
-                            value={address}
-                            className={styles.inputStyle}
+                          {...getInputProps({ placeholder: "Enter address" })}
+                          type="text"
+                          name="address"
+                          value={address}
+                          className={styles.inputStyle}
                         />
                         <div className="autocomplete-dropdown">
                           {loading && <div>...loading</div>}
@@ -216,19 +194,26 @@ const Profile: React.FC = () => {
                   </PlacesAutocomplete>
                 </div>
                 <div className="mt-2">
-                    <p className="mb-1">Latitude: {coordinates.lat}</p>
-                    <p>Longitude: {coordinates.lng}</p>
+                  <p className="mb-1">Latitude: {coordinates.lat}</p>
+                  <p>Longitude: {coordinates.lng}</p>
                 </div>
                 <GoogleMap
-                    mapContainerStyle={{
-                        width: '1000px',
-                        height: '700px'
-                      }}
-                    center={{ lat: coordinates.lat || 0, lng: coordinates.lng || 0 }}
-                    zoom={15}
-                    >
-                    { /* Child components, such as markers, info windows, etc. */ }
-                    <MarkerF position={{ lat: coordinates.lat || 0, lng: coordinates.lng || 0 }} />
+                  mapContainerStyle={{
+                    width: "1000px",
+                    height: "700px",
+                  }}
+                  center={{
+                    lat: coordinates.lat || 0,
+                    lng: coordinates.lng || 0,
+                  }}
+                  zoom={15}
+                >
+                  <MarkerF
+                    position={{
+                      lat: coordinates.lat || 0,
+                      lng: coordinates.lng || 0,
+                    }}
+                  />
                 </GoogleMap>
                 <button onClick={handleSaveClick}>Save</button>
               </>
@@ -250,18 +235,22 @@ const Profile: React.FC = () => {
                   <strong>Latitude:</strong> {user.latitude}
                 </p>
                 <p>
-                  <strong>Longtitude:</strong> {user.longitude}
+                  <strong>Longitude:</strong> {user.longitude}
                 </p>
                 <GoogleMap
-                    mapContainerStyle={{
-                        width: '1000px',
-                        height: '700px'
-                      }}
-                    center={{ lat: user.latitude || 0, lng: user.longitude || 0 }}
-                    zoom={15}
-                    >
-                    { /* Child components, such as markers, info windows, etc. */ }
-                    <MarkerF position={{ lat: user.latitude || 0, lng: user.longitude || 0 }} />
+                  mapContainerStyle={{
+                    width: "1000px",
+                    height: "700px",
+                  }}
+                  center={{ lat: user.latitude || 0, lng: user.longitude || 0 }}
+                  zoom={15}
+                >
+                  <MarkerF
+                    position={{
+                      lat: user.latitude || 0,
+                      lng: user.longitude || 0,
+                    }}
+                  />
                 </GoogleMap>
                 <button onClick={handleEditClick}> Edit </button>
               </>
