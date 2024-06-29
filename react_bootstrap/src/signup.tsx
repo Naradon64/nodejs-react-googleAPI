@@ -56,6 +56,9 @@ const Register = () => {
     console.log("Coordinates:", { lat: data?.latitude, lng: data?.longitude });
   };
 
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  console.log(apiKey);
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
