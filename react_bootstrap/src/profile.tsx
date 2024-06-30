@@ -35,6 +35,7 @@ const Profile: React.FC = () => {
     lat: number | null;
     lng: number | null;
   }>({ lat: null, lng: null });
+  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -66,6 +67,7 @@ const Profile: React.FC = () => {
 
   const handleEditClick = async () => {
     setIsEditing(true);
+    setErrors([]); // Reset validation errors
     if (user) {
       setEditedUser(user);
       setAddress(user.address);
@@ -102,8 +104,27 @@ const Profile: React.FC = () => {
     }
   };
 
+  const validateData = (data: User | null): string[] => {
+    const errors: string[] = [];
+    if (!data) {
+      errors.push("Form data is missing");
+      return errors;
+    }
+    if (!data.name || data.name.length < 1) errors.push("Name is required");
+    if (!data.email || !/\S+@\S+\.\S+/.test(data.email)) errors.push("Invalid email");
+    if (!data.password || data.password.length < 6) errors.push("Password must be at least 6 characters long");
+    if (!data.age || data.age < 1) errors.push("Age must be greater than 0");
+    if (!data.address) errors.push("Address is required");
+    return errors;
+  };
+
   const handleSaveClick = () => {
-    if (token && editedUser) {
+    const validationErrors = validateData(editedUser);
+    if (validationErrors.length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    else if (token && editedUser) {
       axios
         .put(
           `http://localhost:5050/users/${editedUser._id}`,
@@ -149,7 +170,7 @@ const Profile: React.FC = () => {
                   data={editedUser}
                   renderers={materialRenderers}
                   cells={materialCells}
-                  onChange={({ data }) => setEditedUser(data)}
+                  onChange={({ data }) => setEditedUser(data as User)}
                 />
                 <div className={styles.itemStyle}>
                   <strong>Address</strong>
@@ -199,8 +220,8 @@ const Profile: React.FC = () => {
                 </div>
                 <GoogleMap
                   mapContainerStyle={{
-                    width: "1000px",
-                    height: "700px",
+                    width: "800px",
+                    height: "500px",
                   }}
                   center={{
                     lat: coordinates.lat || 0,
@@ -215,6 +236,17 @@ const Profile: React.FC = () => {
                     }}
                   />
                 </GoogleMap>
+                <div>
+                {errors.length > 0 && (
+                  <div className="alert alert-danger">
+                    <ul>
+                      {errors.map((error, index) => (
+                        <li key={index}>{error}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                </div>
                 <button onClick={handleSaveClick}>Save</button>
               </>
             ) : (
@@ -239,8 +271,8 @@ const Profile: React.FC = () => {
                 </p>
                 <GoogleMap
                   mapContainerStyle={{
-                    width: "1000px",
-                    height: "700px",
+                    width: "800px",
+                    height: "500px",
                   }}
                   center={{ lat: user.latitude || 0, lng: user.longitude || 0 }}
                   zoom={15}
