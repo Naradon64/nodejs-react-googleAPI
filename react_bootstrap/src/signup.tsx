@@ -16,6 +16,7 @@ import "./signup.css";
 type Data = {
   name?: string;
   email?: string;
+  password?: string;
   age?: number;
   address?: string;
   latitude?: number;
@@ -27,6 +28,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const navigate = useNavigate();
+  const [errors, setErrors] = useState<string[]>([]);
 
   const handleSelect = async (value: string) => {
     const results = await geocodeByAddress(value);
@@ -39,8 +41,25 @@ const Register = () => {
     }));
   };
 
+  const validateData = (data: Data): string[] => {
+    const errors: string[] = [];
+    if (!data.name || data.name.length < 1) errors.push("Name is required");
+    if (!data.email || !/\S+@\S+\.\S+/.test(data.email)) errors.push("Invalid email");
+    if (!data.password || data.password.length < 6) errors.push("Password must be at least 6 characters long");
+    if (!data.age || data.age < 1) errors.push("Age must be greater than 0");
+    if (!data.address) errors.push("Address is required");
+    if (!data.latitude) errors.push("Latitude is required");
+    if (!data.longitude) errors.push("Longitude is required");
+    return errors;
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const validationErrors = validateData(data || {});
+    if (validationErrors.length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
     axios
       .post("http://localhost:5050/register", data)
       .then((result) => {
@@ -145,6 +164,15 @@ const Register = () => {
                     />
                   </GoogleMap>
                 </div>
+                {errors.length > 0 && (
+                  <div className="alert alert-danger">
+                    <ul>
+                      {errors.map((error, index) => (
+                        <li key={index}>{error}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 <button
                   type="submit"
                   className="btn btn-success w-100 rounded-0"
