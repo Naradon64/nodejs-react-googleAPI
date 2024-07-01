@@ -17,6 +17,8 @@ const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [users, setUsers] = useState<User[]>([]);
 
+  const url = import.meta.env.VITE_BASE_URL; // import URL from .env
+
   useEffect(() => {
     // Get token from localStorage
     const storedToken = localStorage.getItem("token");
@@ -24,7 +26,7 @@ const Home: React.FC = () => {
       setToken(storedToken); // store storedToken value to token value on the top
       // Get user data here
       axios
-        .get("http://localhost:5050/verify", {
+        .get(`${url}verify`, {
           headers: { Authorization: `Bearer ${storedToken}` },
         })
         .then((response) => {
@@ -40,7 +42,7 @@ const Home: React.FC = () => {
     if (token) {
       // the function will triggered when the depencency change but the purpose of "if (token)" is to check if Token actually exist
       axios
-        .get("http://localhost:5050/users", {
+        .get(`${url}users`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => setUsers(response.data))

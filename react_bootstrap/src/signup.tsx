@@ -29,6 +29,7 @@ const Register = () => {
   const [hasInteracted, setHasInteracted] = useState(false);
   const navigate = useNavigate();
   const [errors, setErrors] = useState<string[]>([]);
+  const url = import.meta.env.VITE_BASE_URL; // import URL from .env
 
   const handleSelect = async (value: string) => {
     const results = await geocodeByAddress(value);
@@ -40,12 +41,13 @@ const Register = () => {
       longitude: latLng.lng,
     }));
   };
-
   const validateData = (data: Data): string[] => {
     const errors: string[] = [];
     if (!data.name || data.name.length < 1) errors.push("Name is required");
-    if (!data.email || !/\S+@\S+\.\S+/.test(data.email)) errors.push("Invalid email");
-    if (!data.password || data.password.length < 6) errors.push("Password must be at least 6 characters long");
+    if (!data.email || !/\S+@\S+\.\S+/.test(data.email))
+      errors.push("Invalid email");
+    if (!data.password || data.password.length < 6)
+      errors.push("Password must be at least 6 characters long");
     if (!data.age || data.age < 1) errors.push("Age must be greater than 0");
     if (!data.address) errors.push("Address is required");
     if (!data.latitude) errors.push("Latitude is required");
@@ -61,7 +63,7 @@ const Register = () => {
       return;
     }
     axios
-      .post("http://localhost:5050/register", data)
+      .post(`${url}register`, data)
       .then((result) => {
         console.log(result);
         navigate("/login");
@@ -74,9 +76,6 @@ const Register = () => {
     console.log("Address:", data?.address);
     console.log("Coordinates:", { lat: data?.latitude, lng: data?.longitude });
   };
-
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-  console.log(apiKey);
 
   return (
     <div className="container mt-5">

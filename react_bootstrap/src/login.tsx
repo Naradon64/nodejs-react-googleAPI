@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { JsonForms } from "@jsonforms/react";
@@ -10,19 +10,27 @@ import {
 } from "@jsonforms/material-renderers";
 
 const Login = () => {
-  const [formData, setFormData] = useState<{ email: string; password: string } | null>(null);
+  const [formData, setFormData] = useState<{
+    email: string;
+    password: string;
+  } | null>(null);
   const navigate = useNavigate();
   const [errors, setErrors] = useState<string[]>([]);
   const [serverError, setServerError] = useState<string | null>(null);
+  const url = import.meta.env.VITE_BASE_URL; // import URL from .env
 
-  const validateData = (data: { email: string; password: string } | null): string[] => {
+  const validateData = (
+    data: { email: string; password: string } | null
+  ): string[] => {
     const errors: string[] = [];
     if (!data) {
       errors.push("Form data is missing");
       return errors;
     }
-    if (!data.email || !/\S+@\S+\.\S+/.test(data.email)) errors.push("Invalid email address");
-    if (!data.password || data.password.length < 6) errors.push("Password must be at least 6 characters long");
+    if (!data.email || !/\S+@\S+\.\S+/.test(data.email))
+      errors.push("Invalid email address");
+    if (!data.password || data.password.length < 6)
+      errors.push("Password must be at least 6 characters long");
     return errors;
   };
 
@@ -36,7 +44,7 @@ const Login = () => {
       return;
     }
     axios
-      .post<{ user: any; token: string }>("http://localhost:5050/login", formData)
+      .post<{ user: any; token: string }>(`${url}login`, formData)
       .then((response) => {
         const { token } = response.data;
 
@@ -50,8 +58,7 @@ const Login = () => {
         console.log(err);
         if (err.response && err.response.status === 401) {
           setServerError("Password is not correct");
-        }
-        else if (err.response && err.response.status === 404) {
+        } else if (err.response && err.response.status === 404) {
           setServerError("User not found");
         } else {
           setServerError("An error occurred. Please try again.");
@@ -86,9 +93,7 @@ const Login = () => {
                   </div>
                 )}
                 {serverError && (
-                  <div className="alert alert-danger">
-                    {serverError}
-                  </div>
+                  <div className="alert alert-danger">{serverError}</div>
                 )}
                 <button
                   type="submit"

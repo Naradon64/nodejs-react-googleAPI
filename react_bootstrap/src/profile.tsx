@@ -36,19 +36,20 @@ const Profile: React.FC = () => {
     lng: number | null;
   }>({ lat: null, lng: null });
   const [errors, setErrors] = useState<string[]>([]);
+  const url = import.meta.env.VITE_BASE_URL; // import URL from .env
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
       axios
-        .get("http://localhost:5050/verify", {
+        .get(`${url}verify`, {
           headers: { Authorization: `Bearer ${storedToken}` },
         })
         .then((response) => {
           const userId = response.data.user._id;
           axios
-            .get(`http://localhost:5050/users/${userId}`, {
+            .get(`${url}users/${userId}`, {
               headers: { Authorization: `Bearer ${storedToken}` },
             })
             .then((userData) => {
@@ -111,8 +112,10 @@ const Profile: React.FC = () => {
       return errors;
     }
     if (!data.name || data.name.length < 1) errors.push("Name is required");
-    if (!data.email || !/\S+@\S+\.\S+/.test(data.email)) errors.push("Invalid email");
-    if (!data.password || data.password.length < 6) errors.push("Password must be at least 6 characters long");
+    if (!data.email || !/\S+@\S+\.\S+/.test(data.email))
+      errors.push("Invalid email");
+    if (!data.password || data.password.length < 6)
+      errors.push("Password must be at least 6 characters long");
     if (!data.age || data.age < 1) errors.push("Age must be greater than 0");
     if (!data.address) errors.push("Address is required");
     return errors;
@@ -120,14 +123,14 @@ const Profile: React.FC = () => {
 
   const handleSaveClick = () => {
     const validationErrors = validateData(editedUser);
+
     if (validationErrors.length > 0) {
       setErrors(validationErrors);
       return;
-    }
-    else if (token && editedUser) {
+    } else if (token && editedUser) {
       axios
         .put(
-          `http://localhost:5050/users/${editedUser._id}`,
+          `${url}users/${editedUser._id}`,
           { ...editedUser },
           { headers: { Authorization: `Bearer ${token}` } }
         )
@@ -237,15 +240,15 @@ const Profile: React.FC = () => {
                   />
                 </GoogleMap>
                 <div>
-                {errors.length > 0 && (
-                  <div className="alert alert-danger">
-                    <ul>
-                      {errors.map((error, index) => (
-                        <li key={index}>{error}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                  {errors.length > 0 && (
+                    <div className="alert alert-danger">
+                      <ul>
+                        {errors.map((error, index) => (
+                          <li key={index}>{error}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
                 <button onClick={handleSaveClick}>Save</button>
               </>

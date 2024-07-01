@@ -19,6 +19,7 @@ const Intro: React.FC = () => {
     lat: number | null;
     lng: number | null;
   }>({ lat: null, lng: null });
+  const url = import.meta.env.VITE_BASE_URL; // import URL from .env
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -27,7 +28,7 @@ const Intro: React.FC = () => {
       // verify
 
       axios
-        .get(`http://localhost:5050/users/${id}`, {
+        .get(`${url}users/${id}`, {
           headers: { Authorization: `Bearer ${storedToken}` },
         })
         .then((userData) => {
@@ -42,9 +43,7 @@ const Intro: React.FC = () => {
     // Call google map key from backend to insert it on front end, delete this if you don't want it because there is no use.
     const fetchApiKey = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5050/api/get-google-maps-api-key"
-        );
+        const response = await axios.get(`${url}api/get-google-maps-api-key`);
         setApiKey(response.data.apiKey);
       } catch (err) {
         console.error(err);
@@ -56,12 +55,12 @@ const Intro: React.FC = () => {
 
   // console.log(id); // Check if there is an ID being passed here
 
-  const getUserAddressToLatLng = async (address:string) => {
+  const getUserAddressToLatLng = async (address: string) => {
     //convert string address to latitude longitude by geocode
     const results = await geocodeByAddress(address);
     const latLng = await getLatLng(results[0]);
     setCoordinates(latLng);
-  }
+  };
 
   // เรียกฟังก์ชันเพื่อเอา user.address มาเปลี่ยนเป็น lat, lng
   useEffect(() => {
@@ -81,12 +80,19 @@ const Intro: React.FC = () => {
         width: "80%",
       }}
     >
-      <div><h2>{address}</h2></div>
-      {apiKey && coordinates.lat !== null && coordinates.lng !== null &&(
+      <div>
+        <h2>{address}</h2>
+      </div>
+      {apiKey && coordinates.lat !== null && coordinates.lng !== null && (
         // แสดง google map จาก lat, lng
         <APIProvider apiKey={apiKey}>
-          <Map defaultZoom={15} defaultCenter={{ lat: coordinates.lat, lng: coordinates.lng }}>
-          <Marker position={{ lat: coordinates.lat, lng: coordinates.lng}}></Marker>
+          <Map
+            defaultZoom={15}
+            defaultCenter={{ lat: coordinates.lat, lng: coordinates.lng }}
+          >
+            <Marker
+              position={{ lat: coordinates.lat, lng: coordinates.lng }}
+            ></Marker>
           </Map>
         </APIProvider>
       )}
