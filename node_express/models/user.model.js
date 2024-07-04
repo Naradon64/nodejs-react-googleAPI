@@ -29,6 +29,9 @@ const userSchema = mongoose.Schema(
         longitude: {
             type: Number,
             required: [true, "longitude is missing"],
+        },
+        role: {
+            type: String       
         }
     },
     {

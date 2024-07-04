@@ -56,6 +56,7 @@ app.post('/register', async (req, res) => {
         }
 
         // validate input on user.models.js (such as no email, name or password)
+        req.body.role = "user"; // if it's register through this api, then it's normal user
         const user = await userModel.create(req.body);
         res.status(201).json(user); 
     } catch (err) {
