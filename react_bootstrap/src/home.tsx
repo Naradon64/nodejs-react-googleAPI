@@ -4,40 +4,25 @@ import axios from "axios";
 import styles from "./Home.module.css"; // Import the CSS module
 
 // Define the User type
-type User = {
-  _id: string;
-  name: string;
-  email: string;
-  age: number;
-  address: string;
-  role: string;
-};
+// type User = {
+//   _id: string;
+//   name: string;
+//   email: string;
+//   age: number;
+//   address: string;
+//   role: string;
+// };
 
 const Home: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [users, setUsers] = useState<User[]>([]);
+  const [user, setUser] = useState<any>(null);
+  const [users, setUsers] = useState<any[]>([]);
 
   const url = import.meta.env.VITE_BASE_URL; // import URL from .env
 
   useEffect(() => {
     // Get token from localStorage
     const storedToken = localStorage.getItem("token");
-    // if (storedToken) {
-    //   setToken(storedToken); // store storedToken value to token value on the top
-    //   // Get user data here
-    //   axios
-    //     .get(`${url}verify`, {
-    //       headers: { Authorization: `Bearer ${storedToken}` },
-    //     })
-    //     .then((response) => {
-    //       setUser(response.data.user);
-    //       console.log(response);
-    //     })
-    //     .catch((err) => {
-    //       console.error(err);
-    //     });
-    // }
     if (storedToken) {
       setToken(storedToken);
       axios

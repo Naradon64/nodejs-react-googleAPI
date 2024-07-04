@@ -13,23 +13,11 @@ import PlacesAutocomplete from "react-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
 
-// Define the User type
-type User = {
-  _id: string;
-  name: string;
-  email: string;
-  password: string;
-  age: number;
-  address: string;
-  latitude: number;
-  longitude: number;
-};
-
 const Profile: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<any | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editedUser, setEditedUser] = useState<User | null>(null);
+  const [editedUser, setEditedUser] = useState<any | null>(null);
   const [address, setAddress] = useState<string>("");
   const [coordinates, setCoordinates] = useState<{
     lat: number | null;
@@ -105,7 +93,7 @@ const Profile: React.FC = () => {
     }
   };
 
-  const validateData = (data: User | null): string[] => {
+  const validateData = (data: any | null): string[] => {
     const errors: string[] = [];
     if (!data) {
       errors.push("Form data is missing");
@@ -173,7 +161,7 @@ const Profile: React.FC = () => {
                   data={editedUser}
                   renderers={materialRenderers}
                   cells={materialCells}
-                  onChange={({ data }) => setEditedUser(data as User)}
+                  onChange={({ data }) => setEditedUser(data as any)}
                 />
                 <div className={styles.itemStyle}>
                   <strong>Address</strong>
