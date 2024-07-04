@@ -10,6 +10,7 @@ type User = {
   email: string;
   age: number;
   address: string;
+  role: string;
 };
 
 const Home: React.FC = () => {
@@ -22,18 +23,43 @@ const Home: React.FC = () => {
   useEffect(() => {
     // Get token from localStorage
     const storedToken = localStorage.getItem("token");
+    // if (storedToken) {
+    //   setToken(storedToken); // store storedToken value to token value on the top
+    //   // Get user data here
+    //   axios
+    //     .get(`${url}verify`, {
+    //       headers: { Authorization: `Bearer ${storedToken}` },
+    //     })
+    //     .then((response) => {
+    //       setUser(response.data.user);
+    //       console.log(response);
+    //     })
+    //     .catch((err) => {
+    //       console.error(err);
+    //     });
+    // }
     if (storedToken) {
-      setToken(storedToken); // store storedToken value to token value on the top
-      // Get user data here
+      setToken(storedToken);
       axios
         .get(`${url}verify`, {
           headers: { Authorization: `Bearer ${storedToken}` },
         })
         .then((response) => {
-          setUser(response.data.user);
+          const userId = response.data.user._id;
+          axios
+            .get(`${url}users/${userId}`, {
+              headers: { Authorization: `Bearer ${storedToken}` },
+            })
+            .then((userData) => {
+              console.log(userData);
+              setUser(userData.data);
+            })
+            .catch((err) => {
+              console.error("Error fetching user data:", err);
+            });
         })
         .catch((err) => {
-          console.error(err);
+          console.error("Error verifying token:", err);
         });
     }
   }, []);
