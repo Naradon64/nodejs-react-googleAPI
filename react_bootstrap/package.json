@@ -18,6 +18,7 @@
     "@jsonforms/react": "^3.3.0",
     "@mui/material": "^5.15.20",
     "@react-google-maps/api": "^2.19.3",
+    "@rjsf/core": "^5.19.0",
     "@vis.gl/react-google-maps": "^1.1.0",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",

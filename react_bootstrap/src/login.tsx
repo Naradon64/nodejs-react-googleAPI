@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { JsonForms } from "@jsonforms/react";
@@ -10,39 +10,21 @@ import {
 } from "@jsonforms/material-renderers";
 
 const Login = () => {
-  const [formData, setFormData] = useState<{
-    email: string;
-    password: string;
-  } | null>(null);
-  const navigate = useNavigate();
+  const [formData, setFormData] = useState<any>({});
   const [errors, setErrors] = useState<string[]>([]);
   const [serverError, setServerError] = useState<string | null>(null);
+  const navigate = useNavigate();
   const url = import.meta.env.VITE_BASE_URL; // import URL from .env
 
-  const validateData = (
-    data: { email: string; password: string } | null
-  ): string[] => {
-    const errors: string[] = [];
-    if (!data) {
-      errors.push("Form data is missing");
-      return errors;
-    }
-    if (!data.email || !/\S+@\S+\.\S+/.test(data.email))
-      errors.push("Invalid email address");
-    if (!data.password || data.password.length < 6)
-      errors.push("Password must be at least 6 characters long");
-    return errors;
-  };
-
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrors([]); // Reset validation errors
-    setServerError(null); // Reset server error
-    const validationErrors = validateData(formData);
-    if (validationErrors.length > 0) {
-      setErrors(validationErrors);
+
+    // Check if there are validation errors from JsonForms
+    if (errors.length > 0) {
       return;
     }
+
     axios
       .post<{ user: any; token: string }>(`${url}login`, formData)
       .then((response) => {
@@ -80,7 +62,11 @@ const Login = () => {
                   data={formData}
                   renderers={materialRenderers}
                   cells={materialCells}
-                  onChange={({ data }) => setFormData(data)}
+                  onChange={({ data, errors }: any) => {
+                    setFormData(data);
+                    // change old validation and update the validatino from json Form Schema instead
+                    setErrors(errors.map((error: any) => error.message));
+                  }}
                 />
                 {/* errors จะแสดงผลถ้าใส่ input ไม่ถูก */}
                 {errors.length > 0 && (

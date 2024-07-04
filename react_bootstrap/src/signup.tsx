@@ -13,18 +13,9 @@ import registerSchema from "./json_schema/registerSchema.json";
 import registerUischema from "./json_schema/registerUischema.json";
 import "./signup.css";
 
-type Data = {
-  name?: string;
-  email?: string;
-  password?: string;
-  age?: number;
-  address?: string;
-  latitude?: number;
-  longitude?: number;
-};
-
 const Register = () => {
-  const [data, setData] = useState<Data>();
+  const [data, setData] = useState<any>({});
+
   const [showPassword, setShowPassword] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const navigate = useNavigate();
@@ -34,34 +25,21 @@ const Register = () => {
   const handleSelect = async (value: string) => {
     const results = await geocodeByAddress(value);
     const latLng = await getLatLng(results[0]);
-    setData((prevData) => ({
+    setData((prevData: any) => ({
       ...prevData,
       address: value,
       latitude: latLng.lat,
       longitude: latLng.lng,
     }));
   };
-  const validateData = (data: Data): string[] => {
-    const errors: string[] = [];
-    if (!data.name || data.name.length < 1) errors.push("Name is required");
-    if (!data.email || !/\S+@\S+\.\S+/.test(data.email))
-      errors.push("Invalid email");
-    if (!data.password || data.password.length < 6)
-      errors.push("Password must be at least 6 characters long");
-    if (!data.age || data.age < 1) errors.push("Age must be greater than 0");
-    if (!data.address) errors.push("Address is required");
-    if (!data.latitude) errors.push("Latitude is required");
-    if (!data.longitude) errors.push("Longitude is required");
-    return errors;
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const validationErrors = validateData(data || {});
-    if (validationErrors.length > 0) {
-      setErrors(validationErrors);
+    // validation, if doesn't use this function, axios will send any json that exist in data to .post/register, which is not ideal
+    if (errors.length > 0) {
       return;
     }
+
     axios
       .post(`${url}register`, data)
       .then((result) => {
@@ -69,12 +47,6 @@ const Register = () => {
         navigate("/login");
       })
       .catch((err) => console.log(err));
-  };
-
-  const handleDebug = () => {
-    console.log("Age:", data?.age);
-    console.log("Address:", data?.address);
-    console.log("Coordinates:", { lat: data?.latitude, lng: data?.longitude });
   };
 
   return (
@@ -95,13 +67,17 @@ const Register = () => {
                   data={data}
                   renderers={materialRenderers}
                   cells={materialCells}
-                  onChange={({ data }) => setData(data)}
+                  onChange={({ data, errors }: any) => {
+                    setData(data);
+                    // change old validation and update the validatino from json Form Schema instead
+                    setErrors(errors.map((error: any) => error.message));
+                  }}
                 />
                 <div className="mb-3 position-relative">
                   <PlacesAutocomplete
                     value={data?.address}
                     onChange={(value) =>
-                      setData((prevData) => ({
+                      setData((prevData: any) => ({
                         ...prevData,
                         address: value,
                       }))
@@ -163,28 +139,25 @@ const Register = () => {
                     />
                   </GoogleMap>
                 </div>
-                {errors.length > 0 && (
-                  <div className="alert alert-danger">
-                    <ul>
-                      {errors.map((error, index) => (
-                        <li key={index}>{error}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+
                 <button
                   type="submit"
                   className="btn btn-success w-100 rounded-0"
                 >
                   Register
                 </button>
-                <button
-                  type="button"
-                  className="btn btn-secondary w-100 rounded-0 mt-3"
-                  onClick={handleDebug}
-                >
-                  Debug
-                </button>
+                <div>
+                  {errors.length > 0 && (
+                    <div className="alert alert-danger">
+                      <ul>
+                        {errors.map((error, index) => (
+                          <li key={index}>{error}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+
                 <p className="mt-3 mb-0 text-center">
                   Already have an account?{" "}
                   <Link to="/login" className="btn btn-link p-0">
