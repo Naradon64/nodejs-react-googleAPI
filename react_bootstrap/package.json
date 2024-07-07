@@ -27,6 +27,7 @@
     "react-dom": "^18.2.0",
     "react-places-autocomplete": "^7.3.0",
     "react-router-dom": "^6.23.1",
+    "react-thailand-address-typeahead": "^2.0.1",
     "vite-plugin-html": "^3.2.2"
   },
   "devDependencies": {

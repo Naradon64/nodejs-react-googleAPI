@@ -22,18 +22,46 @@
       "minimum": 1,
       "error": "Age must be greater than 0"
     },
-    "address": {
+    "houseNumber": {
       "type": "string",
-      "description": "Address"
+      "description": "House number"
     },
-    "latitude": {
-      "type": "number",
-      "description": "Latitude"
+    "villageBuilding": {
+      "type": "string",
+      "description": "Village / Building"
     },
-    "longitude": {
-      "type": "number",
-      "description": "Longitude"
+    "soi": {
+      "type": "string",
+      "description": "Soi"
+    },
+    "road": {
+      "type": "string",
+      "description": "Road"
+    },
+    "subDistrict": {
+      "type": "string",
+      "readOnly": true,
+      "description": "Sub-district"
+    },
+    "district": {
+      "type": "string",
+      "readOnly": true,
+      "description": "District"
+    },
+    "province": {
+      "type": "string",
+      "readOnly": true,
+      "description": "Province"
+    },
+    "postalCode": {
+      "type": "string",
+      "readOnly": true,
+      "description": "Postal Code",
+      "options": {
+        "customField": "postalCodeSelect"
+      }
     }
   },
-  "required": ["name", "email", "password", "age", "address", "latitude", "longitude"]
+  "required": ["name", "email", "password", "age", "houseNumber", "villageBuilding", "soi", "road",
+   "subDistrict", "district", "province", "postalCode"]
 }

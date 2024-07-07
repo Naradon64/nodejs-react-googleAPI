@@ -28,7 +28,47 @@
         "range": false,
         "showSlider": false
       }
-    }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/houseNumber",
+      "label": "House Number"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/villageBuilding",
+      "label": "Village / Building"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/soi",
+      "label": "Soi"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/road",
+      "label": "Road"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/subDistrict",
+      "label": "Sub-district"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/district",
+      "label": "District"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/province",
+      "label": "Province"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/postalCode",
+      "label": "Postal Code"
     
+    }
   ]
 }

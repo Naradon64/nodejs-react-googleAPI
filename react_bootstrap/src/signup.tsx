@@ -12,25 +12,50 @@ import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import registerSchema from "./json_schema/registerSchema.json";
 import registerUischema from "./json_schema/registerUischema.json";
 import "./signup.css";
+import {
+  ThailandAddressTypeahead,
+  ThailandAddressValue,
+} from "react-thailand-address-typeahead";
 
 const Register = () => {
   const [data, setData] = useState<any>({});
-
   const [showPassword, setShowPassword] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const navigate = useNavigate();
   const [errors, setErrors] = useState<string[]>([]);
   const url = import.meta.env.VITE_BASE_URL; // import URL from .env
+  const [val, setVal] = React.useState<ThailandAddressValue>(
+    ThailandAddressValue.fromDatasourceItem({
+      d: "",
+      p: "",
+      po: "",
+      s: "",
+    })
+  );
 
-  const handleSelect = async (value: string) => {
-    const results = await geocodeByAddress(value);
-    const latLng = await getLatLng(results[0]);
-    setData((prevData: any) => ({
-      ...prevData,
-      address: value,
-      latitude: latLng.lat,
-      longitude: latLng.lng,
-    }));
+  // function เชื่อม feild ทั้งหมดให้เป็น address
+  const constructAddress = (data: any) => {
+    return `${data.houseNumber || ""} ${data.villageBuilding || ""} ${
+      data.soi || ""
+    } ${data.road || ""} ${data.subDistrict || ""} ${data.district || ""} ${
+      data.province || ""
+    } ${data.postalCode || ""}`.trim();
+  };
+
+  // function แปลง address ที่เป็น string ให้เป็น lat, lng
+  const handleGeocode = async () => {
+    const fullAddress = constructAddress(data);
+    try {
+      const results = await geocodeByAddress(fullAddress);
+      const latLng = await getLatLng(results[0]);
+      setData((prevData: any) => ({
+        ...prevData,
+        latitude: latLng.lat,
+        longitude: latLng.lng,
+      }));
+    } catch (error) {
+      console.error("Error getting geocode:", error);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -40,13 +65,36 @@ const Register = () => {
       return;
     }
 
+    // เรียก function ที่เชื่อม field ที่อยู่ในช่อง input ทั้งหมดให้เป็น address อันเดียว
+    const fullAddress = constructAddress(data);
+    const dataToSend = { ...data, address: fullAddress };
+    
+    // เรียก api ใช้ post เพื่อ register
     axios
-      .post(`${url}register`, data)
+      .post(`${url}register`, dataToSend)
       .then((result) => {
         console.log(result);
         navigate("/login");
       })
       .catch((err) => console.log(err));
+  };
+
+  const handleDebug = () => {
+    const fullAddress = constructAddress(data);
+    const dataToSend = { ...data, address: fullAddress };
+    console.log("Current form data:", dataToSend);
+  };
+
+  // เมื่อ select dropdown ของ <ThailandAddressTypeahead> แล้วให้ใส่เข้าไปในช่องของ json form
+  const handleAddressChange = (val: ThailandAddressValue) => {
+    setVal(val);
+    setData((prevData: any) => ({
+      ...prevData,
+      subDistrict: val.subdistrict,
+      district: val.district,
+      province: val.province,
+      postalCode: val.postalCode,
+    }));
   };
 
   return (
@@ -73,7 +121,31 @@ const Register = () => {
                     setErrors(errors.map((error: any) => error.message));
                   }}
                 />
+
+                <ThailandAddressTypeahead
+                  value={val}
+                  onValueChange={handleAddressChange}
+                >
+                  {/* <ThailandAddressTypeahead.SubdistrictInput placeholder="Tumbon" />
+                  <ThailandAddressTypeahead.DistrictInput placeholder="Amphoe" /> */}
+                  <div>
+                    <div>ค้นหาจาก ตำบล อำเภอ จังหวัด จากรหัสไปรษณีย์</div>
+                    {/* <ThailandAddressTypeahead.ProvinceInput placeholder="Province" /> */}
+                    <ThailandAddressTypeahead.PostalCodeInput placeholder="Postal Code" />
+                  </div>
+                  <ThailandAddressTypeahead.Suggestion />
+                </ThailandAddressTypeahead>
+
+                <button
+                  type="button"
+                  className="btn btn-primary w-100 rounded-0 mt-2"
+                  onClick={handleGeocode}
+                >
+                  view on googlemap
+                </button>
+
                 <div className="mb-3 position-relative">
+                  {/*
                   <PlacesAutocomplete
                     value={data?.address}
                     onChange={(value) =>
@@ -116,6 +188,8 @@ const Register = () => {
                       </div>
                     )}
                   </PlacesAutocomplete>
+                  */}
+
                   <div className="mt-2">
                     <p className="mb-1">Latitude: {data?.latitude}</p>
                     <p>Longitude: {data?.longitude}</p>
@@ -145,6 +219,13 @@ const Register = () => {
                   className="btn btn-success w-100 rounded-0"
                 >
                   Register
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary w-100 rounded-0 mt-2"
+                  onClick={handleDebug}
+                >
+                  Debug
                 </button>
                 <div>
                   {errors.length > 0 && (
