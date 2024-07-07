@@ -35,11 +35,16 @@ const Register = () => {
 
   // function เชื่อม feild ทั้งหมดให้เป็น address
   const constructAddress = (data: any) => {
-    return `${data.houseNumber || ""} ${data.villageBuilding || ""} ${
-      data.soi || ""
-    } ${data.road || ""} ${data.subDistrict || ""} ${data.district || ""} ${
-      data.province || ""
-    } ${data.postalCode || ""}`.trim();
+    const houseNumber = data.houseNumber ? `${data.houseNumber} ` : "";
+    const villageBuilding = data.villageBuilding ? `หมู่บ้าน${data.villageBuilding} ` : "";
+    const soi = data.soi ? `ซ.${data.soi} ` : "";
+    const road = data.road ? `ถ.${data.road} ` : "";
+    const subDistrict = data.subDistrict ? `ต.${data.subDistrict} ` : "";
+    const district = data.district ? `อ.${data.district} ` : "";
+    const province = data.province ? `จ.${data.province} ` : "";
+    const postalCode = data.postalCode ? `${data.postalCode}` : "";
+
+    return `${houseNumber}${villageBuilding}${soi}${road}${subDistrict}${district}${province}${postalCode}`.trim();
   };
 
   // function แปลง address ที่เป็น string ให้เป็น lat, lng
