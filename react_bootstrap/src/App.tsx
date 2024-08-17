@@ -7,6 +7,7 @@ import Home from "./home.tsx";
 import Logout from "./logout.tsx";
 import Profile from "./profile.tsx";
 import Intro from "./mapPage.tsx";
+import Content from "./content.tsx";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/logout" element={<Logout />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
         <Route path="/map/:id" element={<Intro />}></Route>
+        <Route path="/content/" element={<Content />}></Route>
       </Routes>
     </BrowserRouter>
   );

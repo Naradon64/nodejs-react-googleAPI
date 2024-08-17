@@ -65,12 +65,19 @@ const Home: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.sidebar}>
         <div>
-          <Link to="/home" className={styles.sidebarHeader}>
-            Home Page
-          </Link>
+          <div>
+            <Link to="/home" className={styles.sidebarHeader}>
+              Home Page
+            </Link> 
+          </div>
           <div>
             <Link to="/profile" className={styles.sidebarProfile}>
               My Profile
+            </Link>
+          </div>
+          <div>
+            <Link to="/content" className={styles.sidebarProfile}>
+                Content
             </Link>
           </div>
         </div>

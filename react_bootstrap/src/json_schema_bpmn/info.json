@@ -1,0 +1,55 @@
+{
+  "components": [
+    {
+      "label": "Text field",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1k3ewkm",
+        "columns": null
+      },
+      "id": "Field_13dba2s",
+      "key": "textfield_ck7d9"
+    },
+    {
+      "label": "Text field",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1k3ewkm",
+        "columns": null
+      },
+      "id": "Field_0o5znen",
+      "key": "textfield_rsurcn"
+    },
+    {
+      "values": [
+        {
+          "label": "Value",
+          "value": "value"
+        },
+        {
+          "label": "Value 2",
+          "value": "value2"
+        },
+        {
+          "label": "Value 3",
+          "value": "value3"
+        }
+      ],
+      "label": "Checkbox group",
+      "type": "checklist",
+      "layout": {
+        "row": "Row_0nlivq2",
+        "columns": null
+      },
+      "id": "Field_1nljgln",
+      "key": "checklist_nnda6g"
+    }
+  ],
+  "type": "default",
+  "id": "Form_02vepqf",
+  "exporter": {
+    "name": "form-js (https://demo.bpmn.io)",
+    "version": "1.8.3"
+  },
+  "schemaVersion": 16
+}

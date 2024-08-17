@@ -1,0 +1,41 @@
+{
+  "components": [
+    {
+      "label": "Email",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0akq42j",
+        "columns": null
+      },
+      "id": "Field_0qsaptu",
+      "key": "textfield_b32306"
+    },
+    {
+      "label": "Password",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0h934w4",
+        "columns": null
+      },
+      "id": "Field_0d6ykah",
+      "key": "textfield_q2o6rb"
+    },
+    {
+      "label": "Are you human?",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_0oaon3h",
+        "columns": null
+      },
+      "id": "Field_1xbx6hj",
+      "key": "checkbox_8cfs6o"
+    }
+  ],
+  "type": "default",
+  "id": "Form_0iotj4b",
+  "exporter": {
+    "name": "form-js (https://demo.bpmn.io)",
+    "version": "1.8.3"
+  },
+  "schemaVersion": 16
+}

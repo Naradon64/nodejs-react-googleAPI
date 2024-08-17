@@ -1,0 +1,104 @@
+{
+    "components": [
+      {
+        "text": "# File an Invoice\n\nAdd your invoice details below.",
+        "type": "text",
+        "id": "Field_1pgmx7c",
+        "layout": {
+          "row": "Row_1o2pqg4"
+        }
+      },
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "textfield",
+        "validate": {
+          "required": true
+        },
+        "id": "Field_1ftvhre",
+        "layout": {
+          "row": "Row_0j0v4qk"
+        }
+      },
+      {
+        "label": "Email",
+        "type": "textfield",
+        "layout": {
+          "row": "Row_0bqq82d",
+          "columns": null
+        },
+        "id": "Field_0tf4yw9",
+        "key": "email",
+        "validate": {
+          "required": true
+        }
+      },
+      {
+        "label": "Age",
+        "type": "number",
+        "layout": {
+          "row": "Row_0bqq82d",
+          "columns": null
+        },
+        "id": "Field_0av0nr9",
+        "key": "age",
+        "description": "Please Enter Your Age here na krub"
+      },
+      {
+        "label": "testString",
+        "type": "textfield",
+        "layout": {
+          "row": "Row_1hzaht6",
+          "columns": null
+        },
+        "id": "Field_1terokv",
+        "key": "textfield_vlp5q",
+        "defaultValue": "สวัสดีครับ",
+        "readonly": true
+      },
+      {
+        "values": [
+          {
+            "label": "Male",
+            "value": "male"
+          },
+          {
+            "label": "Female",
+            "value": "female"
+          },
+          {
+            "label": "Secret",
+            "value": "secret"
+          }
+        ],
+        "label": "Gender",
+        "type": "checklist",
+        "layout": {
+          "row": "Row_0tjrtoo",
+          "columns": null
+        },
+        "id": "Field_1lmzyel",
+        "key": "genderChecklist",
+        "validate": {
+          "required": true
+        }
+      },
+      {
+        "action": "submit",
+        "key": "submit",
+        "label": "Submit",
+        "type": "button",
+        "id": "Field_1y6bzfy",
+        "layout": {
+          "row": "Row_01h3fdl"
+        }
+      }
+    ],
+    "schemaVersion": 16,
+    "exporter": {
+      "name": "form-js (https://demo.bpmn.io)",
+      "version": "1.8.3"
+    },
+    "type": "default",
+    "id": "Form_0sg0fem"
+  }
