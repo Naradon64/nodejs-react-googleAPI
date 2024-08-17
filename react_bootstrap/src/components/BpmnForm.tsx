@@ -1,35 +1,64 @@
-import React, { useEffect, useRef } from "react";
-import { Form } from '@bpmn-io/form-js';
-import '@bpmn-io/form-js-viewer/dist/assets/form-js.css';
+import React, {
+  useEffect,
+  useRef,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
+import { Form } from "@bpmn-io/form-js";
+import "@bpmn-io/form-js-viewer/dist/assets/form-js.css";
 
 interface BpmnFormProps {
-  schema: object; // Replace 'object' with a more specific type if your schema has a defined structure
+  schema: object;
+  onFormSubmit?: (data: any) => void;
+  onFormCreated?: (form: any) => void;
 }
 
-const BpmnForm: React.FC<BpmnFormProps> = ({ schema }) => {
-  const formRef = useRef<HTMLDivElement | null>(null);
+const BpmnForm = forwardRef<{ submitForm: () => void }, BpmnFormProps>(
+  ({ schema, onFormSubmit, onFormCreated }, ref) => {
+    const formRef = useRef<HTMLDivElement | null>(null);
+    const formInstanceRef = useRef<any>(null);
 
-  useEffect(() => {
-    if (formRef.current) {
-      const form = new Form({
-        container: formRef.current
-      });
+    useEffect(() => {
+      if (formRef.current) {
+        const form = new Form({
+          container: formRef.current,
+        });
 
-      form.on('submit', (event: any) => {
-        console.log(event.data, event.errors);
-      });
+        form.on("submit", (event: any) => {
+          if (onFormSubmit) {
+            onFormSubmit(event.data); // Pass the form data to the parent component
+          }
+        });
 
-      form.importSchema(schema).catch((err: Error) => {
-        console.error('Failed to import form', err);
-      });
+        form
+          .importSchema(schema)
+          .then(() => {
+            formInstanceRef.current = form;
+            if (onFormCreated) {
+              onFormCreated(form);
+            }
+          })
+          .catch((err: Error) => {
+            console.error("Failed to import form", err);
+          });
 
-      return () => {
-        form.destroy();
-      };
-    }
-  }, [schema]); // Re-run the effect if the schema changes
+        return () => {
+          form.destroy();
+        };
+      }
+    }, [schema, onFormSubmit, onFormCreated]);
 
-  return <div ref={formRef} />;
-};
+    // Expose the submitForm method to the parent component
+    useImperativeHandle(ref, () => ({
+      submitForm: () => {
+        if (formInstanceRef.current) {
+          formInstanceRef.current.submit();
+        }
+      },
+    }));
+
+    return <div ref={formRef} />;
+  }
+);
 
 export default BpmnForm;
