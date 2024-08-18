@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import BpmnForm from "./components/BpmnForm";
 import schema1 from "./json_schema_bpmn/info.json";
 import schema2 from "./json_schema_bpmn/info2.json";
+import axios from "axios";
 
 const Content: React.FC = () => {
   const [schemas, setSchemas] = useState<object[]>([]);
@@ -34,6 +35,15 @@ const Content: React.FC = () => {
     });
 
     console.log("Big Form Data:", consolidatedFormData);
+
+    axios
+      .post("http://localhost:5050/submitForms", consolidatedFormData)
+      .then((response) => {
+        console.log("Success!!!", response.data);
+      })
+      .catch((error) => {
+        console.error("Error submitting forms:", error);
+      });
   };
 
   return (

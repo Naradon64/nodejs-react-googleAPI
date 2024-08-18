@@ -5,6 +5,8 @@ const cors = require("cors");
 const userModel = require('./models/user.model.js')
 const auth = require('./middleware/auth.js');
 const user = require("./models/user.model.js");
+const userInfoModel = require('./models/userInfo.model');
+const preferGenreModel = require('./models/preferGenre.model');
 
 
 const app = express();
@@ -15,6 +17,22 @@ const MONGO_URI = process.env.MONGO_URI; // Access MONGO_URI
 
 app.use(express.json());
 app.use(cors());
+
+// CONNECT MONGOOSE HERE!
+mongoose.connect(
+  MONGO_URI
+)
+  .then(() => {
+    console.log("Connected to the database!");
+    app.listen(port, () => {
+      console.log(`Listening to port: ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Connection failed:", err.message);
+  });
+
+
 
 // get all users
 app.get("/users", auth.verifyToken, (req, res) => {
@@ -113,16 +131,34 @@ app.get('/api/get-google-maps-api-key', (req, res) => {
     res.json({ apiKey: googleMapsApiKey });
 });
 
-mongoose.connect(
-    MONGO_URI
-  )
-    .then(() => {
-      console.log("Connected to the database!");
-      app.listen(port, () => {
-        console.log(`Listening to port: ${port}`);
-      });
-    })
-    .catch((err) => {
-      console.error("Connection failed:", err.message);
-    });
 
+// for BMPN forms (the form(s) is in big chunk)
+app.post('/submitForms', async (req, res) => {
+  console.log("Received data:", req.body);
+
+  try {
+      const formDataArray = req.body;
+
+      if (!Array.isArray(formDataArray)) {
+          return res.status(400).json({ message: "Expected an array of form data" });
+      }
+
+      const savedData = [];
+      for (const { formId, formData } of formDataArray) {
+          if (formId === 'userInfo') {
+              const savedUserInfo = await userInfoModel.create(formData);
+              savedData.push(savedUserInfo);
+          } else if (formId === 'preferGenre') {
+              const savedPreferGenre = await preferGenreModel.create(formData);
+              savedData.push(savedPreferGenre);
+          } else {
+              return res.status(400).json({ message: `Invalid form ID: ${formId}` });
+          }
+      }
+
+      res.status(201).json({ success: true, data: savedData });
+  } catch (err) {
+      console.error("Error saving form data:", err);
+      res.status(500).json({ message: "Internal Server Error" });
+  }
+});
