@@ -26,7 +26,7 @@ const BpmnForm = forwardRef<{ submitForm: () => void }, BpmnFormProps>(
 
         form.on("submit", (event: any) => {
           if (onFormSubmit) {
-            onFormSubmit(event.data); // Pass the form data to the parent component
+            onFormSubmit(event.data);
           }
         });
 

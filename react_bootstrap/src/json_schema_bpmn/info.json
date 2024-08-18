@@ -1,52 +1,62 @@
 {
   "components": [
     {
-      "label": "Text field",
-      "type": "textfield",
+      "text": "# User Infomation",
+      "label": "Text view",
+      "type": "text",
       "layout": {
-        "row": "Row_1k3ewkm",
+        "row": "Row_0oxt3ud",
         "columns": null
       },
-      "id": "Field_13dba2s",
-      "key": "textfield_ck7d9"
+      "id": "Field_0rq9zz9"
     },
     {
-      "label": "Text field",
+      "label": "Name",
       "type": "textfield",
       "layout": {
-        "row": "Row_1k3ewkm",
+        "row": "Row_1pl5ozg",
         "columns": null
       },
-      "id": "Field_0o5znen",
-      "key": "textfield_rsurcn"
+      "id": "Field_1qcio31",
+      "key": "name"
+    },
+    {
+      "label": "Email",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1k9q56f",
+        "columns": null
+      },
+      "id": "Field_1ob44fj",
+      "key": "email"
     },
     {
       "values": [
         {
-          "label": "Value",
-          "value": "value"
+          "label": "Male",
+          "value": "male"
         },
         {
-          "label": "Value 2",
-          "value": "value2"
+          "label": "Female",
+          "value": "female"
         },
         {
-          "label": "Value 3",
-          "value": "value3"
+          "label": "Secret",
+          "value": "secret"
         }
       ],
-      "label": "Checkbox group",
-      "type": "checklist",
+      "label": "Gender",
+      "type": "radio",
       "layout": {
-        "row": "Row_0nlivq2",
+        "row": "Row_0pfu48n",
         "columns": null
       },
-      "id": "Field_1nljgln",
-      "key": "checklist_nnda6g"
+      "id": "Field_0zvjgpc",
+      "key": "gender"
     }
   ],
   "type": "default",
-  "id": "Form_02vepqf",
+  "id": "userInfo",
   "exporter": {
     "name": "form-js (https://demo.bpmn.io)",
     "version": "1.8.3"

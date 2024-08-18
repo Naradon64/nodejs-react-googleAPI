@@ -1,104 +1,81 @@
 {
-    "components": [
-      {
-        "text": "# File an Invoice\n\nAdd your invoice details below.",
-        "type": "text",
-        "id": "Field_1pgmx7c",
-        "layout": {
-          "row": "Row_1o2pqg4"
-        }
+  "components": [
+    {
+      "text": "# Question about movies",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_1yq3ynw",
+        "columns": null
       },
-      {
-        "key": "name",
-        "label": "Name",
-        "type": "textfield",
-        "validate": {
-          "required": true
-        },
-        "id": "Field_1ftvhre",
-        "layout": {
-          "row": "Row_0j0v4qk"
-        }
-      },
-      {
-        "label": "Email",
-        "type": "textfield",
-        "layout": {
-          "row": "Row_0bqq82d",
-          "columns": null
-        },
-        "id": "Field_0tf4yw9",
-        "key": "email",
-        "validate": {
-          "required": true
-        }
-      },
-      {
-        "label": "Age",
-        "type": "number",
-        "layout": {
-          "row": "Row_0bqq82d",
-          "columns": null
-        },
-        "id": "Field_0av0nr9",
-        "key": "age",
-        "description": "Please Enter Your Age here na krub"
-      },
-      {
-        "label": "testString",
-        "type": "textfield",
-        "layout": {
-          "row": "Row_1hzaht6",
-          "columns": null
-        },
-        "id": "Field_1terokv",
-        "key": "textfield_vlp5q",
-        "defaultValue": "สวัสดีครับ",
-        "readonly": true
-      },
-      {
-        "values": [
-          {
-            "label": "Male",
-            "value": "male"
-          },
-          {
-            "label": "Female",
-            "value": "female"
-          },
-          {
-            "label": "Secret",
-            "value": "secret"
-          }
-        ],
-        "label": "Gender",
-        "type": "checklist",
-        "layout": {
-          "row": "Row_0tjrtoo",
-          "columns": null
-        },
-        "id": "Field_1lmzyel",
-        "key": "genderChecklist",
-        "validate": {
-          "required": true
-        }
-      },
-      {
-        "action": "submit",
-        "key": "submit",
-        "label": "Submit",
-        "type": "button",
-        "id": "Field_1y6bzfy",
-        "layout": {
-          "row": "Row_01h3fdl"
-        }
-      }
-    ],
-    "schemaVersion": 16,
-    "exporter": {
-      "name": "form-js (https://demo.bpmn.io)",
-      "version": "1.8.3"
+      "id": "Field_0ilm33j"
     },
-    "type": "default",
-    "id": "Form_0sg0fem"
-  }
+    {
+      "label": "Image view",
+      "type": "image",
+      "layout": {
+        "row": "Row_1yq3ynw",
+        "columns": null
+      },
+      "id": "Field_0vhwnlz",
+      "source": "https://www.freelancevideocollective.com/wp-content/uploads/2022/08/French-new-wave-cinema.jpg",
+      "alt": "Error: The source for the image is missing"
+    },
+    {
+      "label": "Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_16xgxvs",
+        "columns": null
+      },
+      "id": "Field_10caf0c",
+      "key": "name"
+    },
+    {
+      "label": "Favorite Movie",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1d7vz80",
+        "columns": null
+      },
+      "id": "Field_171eeoz",
+      "key": "favoriteMovie"
+    },
+    {
+      "values": [
+        {
+          "label": "Horror",
+          "value": "horror"
+        },
+        {
+          "label": "Action",
+          "value": "action"
+        },
+        {
+          "label": "Comedy",
+          "value": "comedy"
+        },
+        {
+          "label": "Drama",
+          "value": "drama"
+        }
+      ],
+      "label": "Select Your Favorite Movie's Genre",
+      "type": "select",
+      "layout": {
+        "row": "Row_1d7vz80",
+        "columns": null
+      },
+      "id": "Field_1uo6p1i",
+      "key": "selectedGenre",
+      "searchable": true
+    }
+  ],
+  "type": "default",
+  "id": "preferGenre",
+  "exporter": {
+    "name": "form-js (https://demo.bpmn.io)",
+    "version": "1.8.3"
+  },
+  "schemaVersion": 16
+}

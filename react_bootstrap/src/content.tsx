@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
 import BpmnForm from "./components/BpmnForm";
-import schema1 from "./json_schema_bpmn/info2.json";
-import schema2 from "./json_schema_bpmn/info.json";
+import schema1 from "./json_schema_bpmn/info.json";
+import schema2 from "./json_schema_bpmn/info2.json";
 
 const Content: React.FC = () => {
-  const [schemas, setSchemas] = useState<object[]>([schema1]);
-  const formRefs = useRef<(any | null)[]>([]); // Corrected type for formRefs
+  const [schemas, setSchemas] = useState<object[]>([]);
+  const formRefs = useRef<(any | null)[]>([]);
+  const consolidatedFormData: { formId: string; formData: any }[] = [];
 
   const addFormWithSchema1 = () => {
     setSchemas([...schemas, schema1]);
@@ -15,16 +16,24 @@ const Content: React.FC = () => {
     setSchemas([...schemas, schema2]);
   };
 
-  const handleFormSubmit = (data: any) => {
-    console.log("Form Data:", data);
+  const handleFormSubmit = (index: number, data: any) => {
+    const schema = schemas[index];
+    const formId = (schema as any).id;
+
+    consolidatedFormData[index] = {
+      formId: formId,
+      formData: data,
+    };
   };
 
   const handleSubmitAllForms = () => {
-    formRefs.current.forEach((formRef) => {
+    formRefs.current.forEach((formRef, index) => {
       if (formRef && typeof formRef.submitForm === "function") {
         formRef.submitForm();
       }
     });
+
+    console.log("Big Form Data:", consolidatedFormData);
   };
 
   return (
@@ -34,7 +43,7 @@ const Content: React.FC = () => {
           key={index}
           ref={(el) => (formRefs.current[index] = el)}
           schema={schema}
-          onFormSubmit={handleFormSubmit}
+          onFormSubmit={(data) => handleFormSubmit(index, data)}
         />
       ))}
       <button onClick={addFormWithSchema1}>Add Form (Schema 1)</button>
