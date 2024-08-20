@@ -42,6 +42,25 @@ app.get("/users", auth.verifyToken, (req, res) => {
       .catch((err) => res.status(500).json({ error: err.message }));
   });
 
+  app.get('/getprefergenre/:_id', (req, res) => {
+    const { _id } = req.params;
+    
+    preferGenreModel.findById(_id)
+      .then(preferGenre => {
+        if (!preferGenre) {
+          return res.status(404).json({ message: 'Genre preference not found' });
+        }
+        
+        res.status(200).json(preferGenre);
+      })
+      .catch(err => {
+        console.error('Error fetching genre preference:', err);
+        res.status(500).json({ message: 'Internal Server Error' });
+      });
+  });
+  
+
+  
 // get user by _id
 app.get('/users/:_id', auth.verifyToken, (req, res) => {
     const { _id } = req.params;
