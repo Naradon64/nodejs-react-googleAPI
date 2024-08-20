@@ -80,6 +80,11 @@ const Home: React.FC = () => {
                 Content
             </Link>
           </div>
+          <div>
+            <Link to="/view-form" className={styles.sidebarProfile}>
+                View form
+            </Link>
+          </div>
         </div>
         <Link to="/logout" className={styles.sidebarLogout}>
           Logout

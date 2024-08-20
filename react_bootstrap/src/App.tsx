@@ -8,6 +8,7 @@ import Logout from "./logout.tsx";
 import Profile from "./profile.tsx";
 import Intro from "./mapPage.tsx";
 import Content from "./content.tsx";
+import ViewForm from "./viewForm.tsx";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/profile" element={<Profile />}></Route>
         <Route path="/map/:id" element={<Intro />}></Route>
         <Route path="/content/" element={<Content />}></Route>
+        <Route path="/view-form/" element={<ViewForm />}></Route>
       </Routes>
     </BrowserRouter>
   );

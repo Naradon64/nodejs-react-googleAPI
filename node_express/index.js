@@ -59,6 +59,22 @@ app.get("/users", auth.verifyToken, (req, res) => {
       });
   });
   
+  app.get('/getuserinfo/:_id', (req, res) => {
+    const { _id } = req.params;
+    
+    userInfoModel.findById(_id)
+      .then(userInfo => {
+        if (!userInfo) {
+          return res.status(404).json({ message: 'User information not found' });
+        }
+        
+        res.status(200).json(userInfo);
+      })
+      .catch(err => {
+        console.error('Error fetching user information:', err);
+        res.status(500).json({ message: 'Internal Server Error' });
+      });
+  });
 
   
 // get user by _id

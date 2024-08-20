@@ -9,12 +9,13 @@ import "@bpmn-io/form-js-viewer/dist/assets/form-js.css";
 
 interface BpmnFormProps {
   schema: object;
+  data?: object;  // Accept data as a prop
   onFormSubmit?: (data: any) => void;
   onFormCreated?: (form: any) => void;
 }
 
 const BpmnForm = forwardRef<{ submitForm: () => void }, BpmnFormProps>(
-  ({ schema, onFormSubmit, onFormCreated }, ref) => {
+  ({ schema, data, onFormSubmit, onFormCreated }, ref) => {
     const formRef = useRef<HTMLDivElement | null>(null);
     const formInstanceRef = useRef<any>(null);
 
@@ -31,7 +32,7 @@ const BpmnForm = forwardRef<{ submitForm: () => void }, BpmnFormProps>(
         });
 
         form
-          .importSchema(schema)
+          .importSchema(schema, data)  // Pass data along with the schema
           .then(() => {
             formInstanceRef.current = form;
             if (onFormCreated) {
@@ -46,7 +47,7 @@ const BpmnForm = forwardRef<{ submitForm: () => void }, BpmnFormProps>(
           form.destroy();
         };
       }
-    }, [schema, onFormSubmit, onFormCreated]);
+    }, [schema, data, onFormSubmit, onFormCreated]);  // Add `data` as a dependency
 
     // Expose the submitForm method to the parent component
     useImperativeHandle(ref, () => ({
