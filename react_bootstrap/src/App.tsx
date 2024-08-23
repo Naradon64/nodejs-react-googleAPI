@@ -9,6 +9,7 @@ import Profile from "./profile.tsx";
 import Intro from "./mapPage.tsx";
 import Content from "./content.tsx";
 import ViewForm from "./viewForm.tsx";
+import Login2 from "./login2.tsx";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/map/:id" element={<Intro />}></Route>
         <Route path="/content/" element={<Content />}></Route>
         <Route path="/view-form/" element={<ViewForm />}></Route>
+        <Route path="/login2/" element={<Login2 />}></Route>
       </Routes>
     </BrowserRouter>
   );
