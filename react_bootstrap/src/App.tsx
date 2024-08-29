@@ -10,6 +10,7 @@ import Intro from "./mapPage.tsx";
 import Content from "./content.tsx";
 import ViewForm from "./viewForm.tsx";
 import Login2 from "./login2.tsx";
+import FormEdit from "./formedit.tsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/content/" element={<Content />}></Route>
         <Route path="/view-form/" element={<ViewForm />}></Route>
         <Route path="/login2/" element={<Login2 />}></Route>
+        <Route path="/form-edit/" element={<FormEdit />}></Route>
       </Routes>
     </BrowserRouter>
   );

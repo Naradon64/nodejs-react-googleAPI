@@ -1,0 +1,85 @@
+{
+  "components": [
+    {
+      "label": "Text field",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0oxt3ud",
+        "columns": null
+      },
+      "id": "Field_0y24zsl",
+      "key": "textfield_p2tk8r"
+    },
+    {
+      "text": "# User Infomation",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_0oxt3ud",
+        "columns": null
+      },
+      "id": "Field_0rq9zz9"
+    },
+    {
+      "label": "Text field",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1pl5ozg",
+        "columns": null
+      },
+      "id": "Field_1sjlwku",
+      "key": "textfield_zonk6f"
+    },
+    {
+      "label": "Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1pl5ozg",
+        "columns": null
+      },
+      "id": "Field_1qcio31",
+      "key": "name"
+    },
+    {
+      "label": "Email",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1k9q56f",
+        "columns": null
+      },
+      "id": "Field_1ob44fj",
+      "key": "email"
+    },
+    {
+      "values": [
+        {
+          "label": "Male",
+          "value": "male"
+        },
+        {
+          "label": "Female",
+          "value": "female"
+        },
+        {
+          "label": "Secret",
+          "value": "secret"
+        }
+      ],
+      "label": "Gender",
+      "type": "radio",
+      "layout": {
+        "row": "Row_0pfu48n",
+        "columns": null
+      },
+      "id": "Field_0zvjgpc",
+      "key": "gender"
+    }
+  ],
+  "type": "default",
+  "id": "userInfo",
+  "exporter": {
+    "name": "form-js (https://demo.bpmn.io)",
+    "version": "1.8.3"
+  },
+  "schemaVersion": 16
+}

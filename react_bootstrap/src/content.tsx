@@ -3,6 +3,7 @@ import BpmnForm from "./components/BpmnForm";
 import schema1 from "./json_schema_bpmn/info.json";
 import schema2 from "./json_schema_bpmn/info2.json";
 import schema3 from "./json_schema_bpmn/form-3.json";
+import exportedSchema from "./json_schema_bpmn/exported-schema.json"
 
 import axios from "axios";
 
@@ -21,6 +22,10 @@ const Content: React.FC = () => {
 
   const addFormWithSchema3 = () => {
     setSchemas([...schemas, schema3]);
+  };
+
+  const addFormWithExportedSchema = () => {
+    setSchemas([...schemas, exportedSchema]);
   };
 
   const handleFormSubmit = (index: number, data: any) => {
@@ -65,6 +70,7 @@ const Content: React.FC = () => {
       <button onClick={addFormWithSchema1}>Add Form (Schema 1)</button>
       <button onClick={addFormWithSchema2}>Add Form (Schema 2)</button>
       <button onClick={addFormWithSchema3}>Add Form (Schema 3)</button>
+      <button onClick={addFormWithExportedSchema}>Add Form (exportedSchema)</button>
       <button onClick={handleSubmitAllForms}>Submit All Forms</button>
     </div>
   );

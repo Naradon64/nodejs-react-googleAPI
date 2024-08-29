@@ -4,7 +4,7 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import { Form } from "@bpmn-io/form-js";
+import { Form, FormEditor } from "@bpmn-io/form-js";
 import "@bpmn-io/form-js-viewer/dist/assets/form-js.css";
 
 interface BpmnFormProps {
@@ -21,7 +21,7 @@ const BpmnForm = forwardRef<{ submitForm: () => void }, BpmnFormProps>(
 
     useEffect(() => {
       if (formRef.current) {
-        const form = new Form({
+        const form = new Form({ // edit this line if you want to change to Form Editor
           container: formRef.current,
         });
 
