@@ -1,43 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import { FormEditor } from '@bpmn-io/form-js';
-import schema1 from "./json_schema_bpmn/info.json";
+import React from "react";
+import BpmnForm from "./components/BpmnForm";
+import schema1 from "./json_schema_bpmn/info2.json";
 
 const FormEdit: React.FC = () => {
-  const editorContainerRef = useRef<HTMLDivElement | null>(null);
-  const [formEditor, setFormEditor] = useState<FormEditor | null>(null);
-
-  useEffect(() => {
-    if (editorContainerRef.current) {
-      const editor = new FormEditor({
-        container: editorContainerRef.current,
-      });
-      setFormEditor(editor);
-
-      editor
-        .importSchema(schema1)
-        .then(() => console.log('Schema imported successfully'))
-        .catch((err) => console.error('Importing schema failed', err));
-
-      return () => {
-        editor.destroy();
-      };
-    }
-  }, []);
-
-  const handleSave = () => {
-    if (formEditor) {
-      const exportedSchema = formEditor.saveSchema();
-      const schemaJson = JSON.stringify(exportedSchema, null, 2);
-      const blob = new Blob([schemaJson], { type: 'application/json' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'exported-schema.json';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  };
-
   const containerStyle: React.CSSProperties = {
     height: '100%',
     border: '1px solid #ccc',
@@ -47,6 +12,11 @@ const FormEdit: React.FC = () => {
     backgroundColor: '#f9f9f9',
     overflow: 'auto',
     margin: '20px 0'
+  };
+
+  const headerStyle: React.CSSProperties = {
+    fontFamily: "'IBM Plex Sans', sans-serif",
+    color: '#333',
   };
 
   const buttonStyle: React.CSSProperties = {
@@ -60,16 +30,15 @@ const FormEdit: React.FC = () => {
     marginTop: '10px',
   };
 
-  const headerStyle: React.CSSProperties = {
-    fontFamily: "'IBM Plex Sans', sans-serif",
-    color: '#333',
-  };
-
   return (
     <div style={{ padding: '20px', fontFamily: "'IBM Plex Sans', sans-serif" }}>
       <h1 style={headerStyle}>React Form Editor using BPMN.io</h1>
-      <div ref={editorContainerRef} style={containerStyle}></div>
-      <button onClick={handleSave} style={buttonStyle}>Save Schema</button>
+      <div style={containerStyle}>
+        <BpmnForm
+          schema={schema1}
+          isEditor={true} // Use FormEditor
+        />
+      </div>
     </div>
   );
 };

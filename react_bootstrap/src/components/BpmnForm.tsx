@@ -4,7 +4,8 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import { Form, FormEditor } from "@bpmn-io/form-js";
+import { Form } from "@bpmn-io/form-js";
+import { FormEditor } from "@bpmn-io/form-js";
 import "@bpmn-io/form-js-viewer/dist/assets/form-js.css";
 
 interface BpmnFormProps {
@@ -12,16 +13,38 @@ interface BpmnFormProps {
   data?: object;  // Accept data as a prop
   onFormSubmit?: (data: any) => void;
   onFormCreated?: (form: any) => void;
+  isEditor?: boolean; // Add isEditor prop
 }
 
 const BpmnForm = forwardRef<{ submitForm: () => void }, BpmnFormProps>(
-  ({ schema, data, onFormSubmit, onFormCreated }, ref) => {
+  ({ schema, data, onFormSubmit, onFormCreated, isEditor }, ref) => {
     const formRef = useRef<HTMLDivElement | null>(null);
+    const editorContainerRef = useRef<HTMLDivElement | null>(null);
     const formInstanceRef = useRef<any>(null);
 
     useEffect(() => {
-      if (formRef.current) {
-        const form = new Form({ // edit this line if you want to change to Form Editor
+      if (isEditor && editorContainerRef.current) {
+        const editor = new FormEditor({
+          container: editorContainerRef.current,
+        });
+
+        editor
+          .importSchema(schema)
+          .then(() => {
+            formInstanceRef.current = editor;
+            if (onFormCreated) {
+              onFormCreated(editor);
+            }
+          })
+          .catch((err: Error) => {
+            console.error("Failed to import form", err);
+          });
+
+        return () => {
+          editor.destroy();
+        };
+      } else if (!isEditor && formRef.current) {
+        const form = new Form({
           container: formRef.current,
         });
 
@@ -47,9 +70,8 @@ const BpmnForm = forwardRef<{ submitForm: () => void }, BpmnFormProps>(
           form.destroy();
         };
       }
-    }, [schema, data, onFormSubmit, onFormCreated]);  // Add `data` as a dependency
+    }, [schema, data, onFormSubmit, onFormCreated, isEditor]);
 
-    // Expose the submitForm method to the parent component
     useImperativeHandle(ref, () => ({
       submitForm: () => {
         if (formInstanceRef.current) {
@@ -58,7 +80,7 @@ const BpmnForm = forwardRef<{ submitForm: () => void }, BpmnFormProps>(
       },
     }));
 
-    return <div ref={formRef} />;
+    return isEditor ? <div ref={editorContainerRef} /> : <div ref={formRef} />;
   }
 );
 
