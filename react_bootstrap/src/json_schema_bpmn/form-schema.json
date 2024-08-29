@@ -1,0 +1,111 @@
+{
+  "components": [
+    {
+      "label": "Text area",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_1yq3ynw",
+        "columns": null
+      },
+      "id": "Field_1lksh1w",
+      "key": "textarea_s08t9"
+    },
+    {
+      "label": "Text area",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_1yq3ynw",
+        "columns": null
+      },
+      "id": "Field_0li6wew",
+      "key": "textarea_zb66ac"
+    },
+    {
+      "label": "Text area",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_1yq3ynw",
+        "columns": null
+      },
+      "id": "Field_01bwf05",
+      "key": "textarea_6o6avu"
+    },
+    {
+      "text": "# Question about movies",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_1yq3ynw",
+        "columns": null
+      },
+      "id": "Field_0ilm33j"
+    },
+    {
+      "label": "Image view",
+      "type": "image",
+      "layout": {
+        "row": "Row_1yq3ynw",
+        "columns": null
+      },
+      "id": "Field_0vhwnlz",
+      "source": "https://www.freelancevideocollective.com/wp-content/uploads/2022/08/French-new-wave-cinema.jpg",
+      "alt": "Error: The source for the image is missing"
+    },
+    {
+      "label": "Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_16xgxvs",
+        "columns": null
+      },
+      "id": "Field_10caf0c",
+      "key": "name"
+    },
+    {
+      "label": "Favorite Movie",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1d7vz80",
+        "columns": null
+      },
+      "id": "Field_171eeoz",
+      "key": "favoriteMovie"
+    },
+    {
+      "values": [
+        {
+          "label": "Horror",
+          "value": "horror"
+        },
+        {
+          "label": "Action",
+          "value": "action"
+        },
+        {
+          "label": "Comedy",
+          "value": "comedy"
+        },
+        {
+          "label": "Drama",
+          "value": "drama"
+        }
+      ],
+      "label": "Select Your Favorite Movie's Genre",
+      "type": "select",
+      "layout": {
+        "row": "Row_1d7vz80",
+        "columns": null
+      },
+      "id": "Field_1uo6p1i",
+      "key": "selectedGenre",
+      "searchable": true
+    }
+  ],
+  "type": "default",
+  "id": "preferGenre",
+  "exporter": {
+    "name": "form-js (https://demo.bpmn.io)",
+    "version": "1.8.3"
+  },
+  "schemaVersion": 16
+}
